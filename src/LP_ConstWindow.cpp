@@ -50,7 +50,7 @@ arma::mat LPSmooth_matrix(const arma::mat yMat, const double h,
                           xMatWeight.t() };
 
     arma::rowvec weightsLeft{ factorialFunction(drv) * weightsMat.row(drv) };
-    arma::rowvec weightsRight{ pow(-1, drv) * weightsLeft };
+    arma::rowvec weightsRight{ std::pow(-1, drv) * weightsLeft };
 
     // calculation of estimates (complete column)
     yMatOut.col(colIndex) = yMat.cols(0, xBound.n_rows - 1) * weightsLeft.t();

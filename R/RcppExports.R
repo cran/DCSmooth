@@ -5,12 +5,8 @@ xMatrix <- function(xVector, polyOrder) {
     .Call('_DCSmooth_xMatrix', PACKAGE = 'DCSmooth', xVector, polyOrder)
 }
 
-np_matrix <- function(kernFcnPtr, p, n = 500L) {
-    .Call('_DCSmooth_np_matrix', PACKAGE = 'DCSmooth', kernFcnPtr, p, n)
-}
-
-m_weights <- function(npMatrix, u, drv) {
-    .Call('_DCSmooth_m_weights', PACKAGE = 'DCSmooth', npMatrix, u, drv)
+cumsum_part_reverse <- function(vec_1, vec_2) {
+    .Call('_DCSmooth_cumsum_part_reverse', PACKAGE = 'DCSmooth', vec_1, vec_2)
 }
 
 acfMatrix_quarter2 <- function(y_Mat) {

@@ -66,12 +66,12 @@ set.options <- function(    # inside function with default values in arguments
   
   exception.check.options.input(type, kerns, drv, var_est, IPI_options)
   
-  if (var_est == "lm" && type == "KR")
-  {
-    warning("Long-Memory bandwidth selection only supported for local ", 
-            "polynomial regression. Type set to \"LP\".")
-    type <- "LP"
-  }
+  # if (var_est == "lm" && type == "KR")
+  # {
+  #   warning("Long-Memory bandwidth selection only supported for local ", 
+  #           "polynomial regression. Type set to \"LP\".")
+  #   type <- "LP"
+  # }
   if (var_est == "lm")
   {
     message("Estimation under long-memory errors (SFARIMA) is currently in ", 

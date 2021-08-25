@@ -35,7 +35,7 @@ arma::mat KRSmooth_matrix2(arma::mat yMat, double h, int drv,  SEXP kernFcnPtr)
   arma::colvec  uInterior{ arma::linspace(-bndw, bndw, windowWidth) / 
                            (h * nCol) }; // vector from -1 to 1 to compute weights
   arma::colvec  weightsInterior{ kernFcn(uInterior, 1 ) / 
-                                 (nCol * pow(h, drv + 1.0)) };              // computation of weights (put in kernel-function later)
+                                 (nCol * std::pow(h, drv + 1.0)) };              // computation of weights (put in kernel-function later)
   arma::mat     yMatInterior(nRow, windowWidth);                            // empty matrix for use inside loop
   
   // Loops smooth over the columns, conditional on rows. That is, every row is
@@ -54,7 +54,7 @@ arma::mat KRSmooth_matrix2(arma::mat yMat, double h, int drv,  SEXP kernFcnPtr)
     double q = static_cast<double>(colIndex)/bndw;
     arma::colvec  uBound(arma::regspace(colIndex, -bndw) / (h * nCol));
     arma::colvec  weightsBound{ kernFcn(uBound, q) / 
-                              (nCol * pow(h, drv + 1.0)) };
+                              (nCol * std::pow(h, drv + 1.0)) };
     
     arma::mat     yLeftMat{ yMat.cols(0, uBound.n_rows - 1) };
     arma::mat     yRightMat{ yMat.cols(nCol - uBound.n_rows, nCol - 1) };

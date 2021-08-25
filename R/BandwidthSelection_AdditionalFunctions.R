@@ -84,13 +84,18 @@ integral.calc.KR = function(m11, m22, n_sub)
 kernel.prop.LP = function(kernel_fcn, p, drv, n_int = 5000)
 {
   u_seq  = seq(from = -1, to = 1, length.out = (2 * n_int + 1))
-  np_matrix = np_matrix(kernel_fcn, p, n_int)
-  add_weights = m_weights(np_matrix, u_seq, drv)
+  # np_matrix = np_matrix(kernel_fcn, p, n_int)
+  # add_weights = m_weights(np_matrix, u_seq, drv)
+  # 
+  # val_R  = sum((add_weights^2 *
+  #                 kernel_fcn_use(u_seq, q = 1, kernel_fcn))^2)/n_int
+  # val_mu = sum((add_weights * kernel_fcn_use(u_seq, q = 1, kernel_fcn)) *
+  #               u_seq^(p + 1)) / (n_int * factorial(p + 1))
   
-  val_R  = sum((add_weights^2 * 
-                  kernel_fcn_use(u_seq, q = 1, kernel_fcn))^2)/n_int
-  val_mu = sum((add_weights * kernel_fcn_use(u_seq, q = 1, kernel_fcn)) *
+  val_R  = sum(kernel_fcn_use(u_seq, q = 1, kernel_fcn)^2)/n_int
+  val_mu = sum(kernel_fcn_use(u_seq, q = 1, kernel_fcn) *
                 u_seq^(p + 1)) / (n_int * factorial(p + 1))
+  # TODO: check if "factorial(p + 1)" is correctly
   
   return(list(R = val_R, mu = val_mu))
 }
@@ -144,12 +149,22 @@ deflation.LP = function(h, dcs_options, n_x, n_t)
   return(h_defl)
 }
 
-inflation.KR = function(h, n, IPI_options)
+inflation.KR = function(h, n, dcs_options)
 {
-  h_infl_xx = c(IPI_options$infl_par[1] * h[1]^IPI_options$infl_exp[1],
-              IPI_options$infl_par[2] * h[2]^IPI_options$infl_exp[2])
-  h_infl_tt = c(IPI_options$infl_par[2] * h[1]^IPI_options$infl_exp[2],
-              IPI_options$infl_par[1] * h[2]^IPI_options$infl_exp[1])
+  if (dcs_options$IPI_options$infl_exp[1] == "auto")
+  {
+    infl_exp = c(0, 0)
+    infl_exp[1] = (dcs_options$p_order[1] + dcs_options$drv[2] + 2)/
+      (sum(dcs_options$p_order) + 3)
+    infl_exp[2] = (dcs_options$p_order[2] + dcs_options$drv[1] + 2)/
+      (sum(dcs_options$p_order) + 3)
+  } else {
+    infl_exp = dcs_options$IPI_options$infl_exp
+  }
+  
+  infl_par = dcs_options$IPI_options$infl_par
+  h_infl_xx = c(infl_par[1] * h[1]^infl_exp[1], infl_par[2] * h[2]^infl_exp[1])
+  h_infl_tt = c(infl_par[2] * h[1]^infl_exp[2], infl_par[1] * h[2]^infl_exp[2])
   
   # ensure no bandwidth > 0.5 (or 0.45) as KR cannot handle estimation windows
   # > 1

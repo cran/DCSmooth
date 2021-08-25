@@ -11,8 +11,8 @@
 
 #' Simulation of a \eqn{QARMA(p, q)}-process
 #' 
-#' @description \code{qarma.sim} is simulates a specified QARMA-model
-#'  on a lattice, with normally distributed innovations.
+#' @description \code{qarma.sim} simulates a specified QARMA-model
+#'  on a lattice with normally distributed innovations.
 #' 
 #' @section Details:
 #' Simulation of a top-left dependent spatial ARMA process (QARMA). This 

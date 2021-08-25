@@ -11,6 +11,13 @@ KR.bndw = function(Y, dcs_options, add_options)
   n_x = dim(Y)[1]; n_t = dim(Y)[2]
   n  = n_x * n_t                            # total number of observations
   
+  # set variables for weight type
+  kern_type_vec = sub("^([[:alpha:]]*).*", "\\1", dcs_options$kern)
+                                                # extract weighting type
+  mu_vec = as.numeric(substr(dcs_options$kern, nchar(dcs_options$kern) - 1,
+                             nchar(dcs_options$kern) - 1))
+                                                # extract kernel parameter mu
+  
   # set kernel Function to use in optimization
   kernel_x = kernel_fcn_assign(dcs_options$kerns[1])
   kernel_t = kernel_fcn_assign(dcs_options$kerns[2])
@@ -31,7 +38,7 @@ KR.bndw = function(Y, dcs_options, add_options)
     iteration_count = iteration_count + 1
     h_opt_temp   = pmin(h_opt[1:2], c(0.45, 0.45)) 
                           # KR can't handle too large bandwidths
-    h_infl  = inflation.KR(h_opt_temp, c(n_x, n_t), dcs_options$IPI_options)
+    h_infl  = inflation.KR(h_opt_temp, c(n_x, n_t), dcs_options)
                           # inflation of bndws for estimation of derivatives
     
     # constant bandwidth only reasonable for estimation of derivatives
@@ -73,15 +80,30 @@ KR.bndw = function(Y, dcs_options, add_options)
     } else {
       n_sub = n                         # all observations are used
     }
-      
-    # calculate variance factor
-    var_est = suppressWarnings(cf.estimation(Y - Y_smth,
-                                             dcs_options, add_options))
-    var_coef = var_est$cf_est
-    var_model = var_est$var_model
     
-    # calculate optimal bandwidths for next step
-    h_opt = h.opt.KR(mxx, mtt, var_coef, n, n_sub, kernel_prop_x, kernel_prop_t)
+    ### Estimation of Variance Factor and Model ###
+    if (dcs_options$var_est == "lm") ### Long-memory estimation
+    {
+      # calculate variance factor
+      var_est = suppressWarnings(cf.estimation.LM(Y - Y_smth,
+                                                  add_options$model_order))
+      var_coef = var_est$cf_est
+      var_model = var_est$var_model
+      
+      # calculate optimal bandwidths for next step
+      h_opt = h.opt.LM(mxx, mtt, var_coef, var_model, n_sub, dcs_options, 
+                       n_x, n_t)
+    } else {                         ### Short-memory or iid. estimation
+      # calculate variance factor
+      var_est   = suppressWarnings(cf.estimation(Y - Y_smth, dcs_options,
+                                                 add_options))
+      var_coef  = var_est$cf_est
+      var_model = var_est$var_model
+      
+      # calculate optimal bandwidths for next step
+      h_opt = h.opt.KR(mxx, mtt, var_coef, n, n_sub, kernel_prop_x,
+                       kernel_prop_t)
+    }
     
     # break condition
     if( ((h_opt[1]/h_opt_temp[1] - 1 < 0.001) && (h_opt[2]/h_opt_temp[2] - 1 

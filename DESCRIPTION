@@ -2,11 +2,10 @@ Package: DCSmooth
 Type: Package
 Title: Nonparametric Regression and Bandwidth Selection for Spatial
         Models
-Version: 1.0.1
+Version: 1.0.2
 Authors@R: c(person("Bastian", "Schaefer",
     email = "bastian.schaefer@uni-paderborn.de", role = c("aut", "cre")),
-    person("Sebastian", "Letmathe", role = "ctb"), person("Yuanhua", "Feng", 
-    role = "ctb"))
+    person("Sebastian", "Letmathe", role = "ctb"))
 Description: Nonparametric smoothing techniques for
     data on a lattice and functional time series. Smoothing is done via
     kernel regression or local polynomial regression, a bandwidth selection
@@ -19,12 +18,11 @@ Description: Nonparametric smoothing techniques for
     Feng/Schaefer (2021) <https://ideas.repec.org/p/pdn/ciepap/144.html>, 
     Schaefer/Feng (2021) <https://ideas.repec.org/p/pdn/ciepap/143.html>.
 Author: Bastian Schaefer [aut, cre],
-  Sebastian Letmathe [ctb],
-  Yuanhua Feng [ctb]
+  Sebastian Letmathe [ctb]
 Maintainer: Bastian Schaefer <bastian.schaefer@uni-paderborn.de>
 License: GPL-3
 LazyData: true
-Imports: Rcpp, plotly, fracdiff, stats
+Imports: Rcpp, plotly, astsa, stats
 LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 7.1.1
 Encoding: UTF-8
@@ -32,6 +30,6 @@ VignetteBuilder: knitr
 Depends: R (>= 3.1.0)
 Suggests: knitr, rmarkdown, testthat
 NeedsCompilation: yes
-Packaged: 2021-08-10 09:26:26 UTC; Bastian Schäfer
+Packaged: 2021-08-17 20:55:21 UTC; Bastian Schäfer
 Repository: CRAN
-Date/Publication: 2021-08-12 09:10:06 UTC
+Date/Publication: 2021-08-25 12:50:32 UTC

@@ -24,29 +24,15 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// np_matrix
-arma::mat np_matrix(SEXP kernFcnPtr, int p, int n);
-RcppExport SEXP _DCSmooth_np_matrix(SEXP kernFcnPtrSEXP, SEXP pSEXP, SEXP nSEXP) {
+// cumsum_part_reverse
+NumericVector cumsum_part_reverse(arma::rowvec vec_1, arma::colvec vec_2);
+RcppExport SEXP _DCSmooth_cumsum_part_reverse(SEXP vec_1SEXP, SEXP vec_2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type kernFcnPtr(kernFcnPtrSEXP);
-    Rcpp::traits::input_parameter< int >::type p(pSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(np_matrix(kernFcnPtr, p, n));
-    return rcpp_result_gen;
-END_RCPP
-}
-// m_weights
-arma::vec m_weights(arma::mat npMatrix, arma::vec u, int drv);
-RcppExport SEXP _DCSmooth_m_weights(SEXP npMatrixSEXP, SEXP uSEXP, SEXP drvSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type npMatrix(npMatrixSEXP);
-    Rcpp::traits::input_parameter< arma::vec >::type u(uSEXP);
-    Rcpp::traits::input_parameter< int >::type drv(drvSEXP);
-    rcpp_result_gen = Rcpp::wrap(m_weights(npMatrix, u, drv));
+    Rcpp::traits::input_parameter< arma::rowvec >::type vec_1(vec_1SEXP);
+    Rcpp::traits::input_parameter< arma::colvec >::type vec_2(vec_2SEXP);
+    rcpp_result_gen = Rcpp::wrap(cumsum_part_reverse(vec_1, vec_2));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -381,8 +367,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_DCSmooth_xMatrix", (DL_FUNC) &_DCSmooth_xMatrix, 2},
-    {"_DCSmooth_np_matrix", (DL_FUNC) &_DCSmooth_np_matrix, 3},
-    {"_DCSmooth_m_weights", (DL_FUNC) &_DCSmooth_m_weights, 3},
+    {"_DCSmooth_cumsum_part_reverse", (DL_FUNC) &_DCSmooth_cumsum_part_reverse, 2},
     {"_DCSmooth_acfMatrix_quarter2", (DL_FUNC) &_DCSmooth_acfMatrix_quarter2, 1},
     {"_DCSmooth_KRSmooth_matrix2", (DL_FUNC) &_DCSmooth_KRSmooth_matrix2, 4},
     {"_DCSmooth_KR_dcs_const0", (DL_FUNC) &_DCSmooth_KR_dcs_const0, 5},

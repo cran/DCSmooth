@@ -51,7 +51,7 @@ arma::mat KRSmooth_matrix(arma::mat yMat, double h, int drv, SEXP kernFcnPtr)
     arma::colvec uBound{ arma::regspace(colIndex, colIndex + 1 - windowWidth) /
       ((nCol - 1) * h_window) };
     arma::colvec weightsBound{ kernFcn(uBound, q) /
-                               ((nCol - 1) * pow(h_window, drv + 1.0)) };
+                               ((nCol - 1) * std::pow(h_window, drv + 1.0)) };
 
     // calculation of estimates (complete columns)
     yMatOut.col(colIndex) = yLeftMat * weightsBound;
@@ -61,7 +61,7 @@ arma::mat KRSmooth_matrix(arma::mat yMat, double h, int drv, SEXP kernFcnPtr)
   // smoothing over interior values
   arma::colvec  uInterior{ arma::regspace(-bndw, bndw) / (h * (nCol - 1)) };   // vector from -1 to 1 to compute weights
   arma::colvec  weightsInterior{ kernFcn(uInterior, 1) / 
-                                 ((nCol - 1) * pow(h, drv + 1.0)) };           // computation of weights (put in kernel-function later)
+                                 ((nCol - 1) * std::pow(h, drv + 1.0)) };           // computation of weights (put in kernel-function later)
 
   // Loops smooth over the columns, conditional on rows. That is, every row is
   // considered to be an individual time series. To speed up computation, the

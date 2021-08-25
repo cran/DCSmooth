@@ -52,7 +52,7 @@ arma::mat LPSmooth_matrix2_BMod(const arma::mat yMat, const double h,
                              xMatWeight.t() };
 
     arma::rowvec weightsLeft{ factorialFunction(drv) * weightsMat.row(drv) };
-    arma::rowvec weightsRight{ pow(-1, drv) * weightsLeft }; // pow(-1, drv) ensures the correct sign
+    arma::rowvec weightsRight{ std::pow(-1, drv) * weightsLeft }; // pow(-1, drv) ensures the correct sign
       // calculation of estimates (complete column)
     yMatOut.col(colIndex) = yMat.cols(0, xBound.n_rows - 1) * weightsLeft.t();
     yMatOut.col(nCol - colIndex - 1) = arma::reverse(yMat.cols(nCol -

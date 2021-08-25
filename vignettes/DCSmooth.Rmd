@@ -38,6 +38,8 @@ The *DCSmooth* contains the following functions, methods and data sets:
 | `surface.dcs()`    | Plot for the surface from an `"dcs"`-object.            |
 | `qarma.sim()`      | Simulate a QARMA-model.                                 |
 | `qarma.est()`      | Estimate the parameters of a QARMA-model.               |
+| `sfarima.sim()`    | Simulate a SFARIMA-model.                               |
+| `sfarima.est()`    | Estimate the parameters of a SFARIMA-model.             |
 
 | <span style="display: inline-block; width:170px">Methods/Generics</span>|<span style="display: inline-block; width:500px"> </span>|
 |:-------------------|:--------------------------------------------------------|
@@ -137,7 +139,7 @@ Simulation of a top-left dependent spatial ARMA process (QARMA). This function r
 Arguments of `qarma.sim` are
 
 * **n_x**, **n_t** The dimension of the resulting matrix of observations, where `n_x` specifies the number of rows and `n_t` the number of columns. Initially, a matrix of $2 n_x \times 2 n_t$ is simulated, of which simulation points with $i \leq n_x$ or $j \leq n_t$ are discarded (burn-in period).
-* **model** A list containing the model parameters to be used in the simulation of the form `list(ar, ma, sigma)`. The values `ar` and `ma` are matrices of size $(p_x + 1) \times (p_t + 1)$ respective $(q_x + 1) \times (q_t + 1)$ and containing the coefficients in ascending lag order, so that the upper left entry is equal to 1 (for lag 0 in both dimensions). See the examples in the application part ???. The standard deviation of the iid. innovations with zero mean is `sigma`, which should be a single positive number.
+* **model** A list containing the model parameters to be used in the simulation of the form `list(ar, ma, sigma)`. The values `ar` and `ma` are matrices of size $(p_x + 1) \times (p_t + 1)$ respective $(q_x + 1) \times (q_t + 1)$ and containing the coefficients in ascending lag order, so that the upper left entry is equal to 1 (for lag 0 in both dimensions). See the examples in the application part 3.2. The standard deviation of the iid. innovations with zero mean is `sigma`, which should be a single positive number.
 
 `qarma.sim` returns an object of class `qarma` with attribute `"subclass" = "sim"` including the following values:
 
@@ -161,6 +163,36 @@ Arguments of `qarma.est` are
 * **model** A list of estimated model coefficients containing the matrices `ar` of autoregressive coefficients, the matrix `ma` of moving average coefficients as well as the standard deviation of residuals `sigma`.
 * **stnry** Indicator variable (boolean) for stationarity of the process.
 
+### `sfarima.sim` {-}
+Simulation of a (separable) spatial fractional ARIMA (SFARIMA) process. This function returns an object of class `sfarima` with attribute `"subclass" = "sim"`. The simulated innovations are created from a normal distribution with specified variance $\sigma^2$. This function uses a burn-in period for more consistent results.
+
+Arguments of `sfarima.sim` are
+
+* **n_x**, **n_t** The dimension of the resulting matrix of observations, where `n_x` specifies the number of rows and `n_t` the number of columns. Initially, a matrix of $2 n_x \times 2 n_t$ is simulated, of which simulation points with $i \leq n_x$ or $j \leq n_t$ are discarded (burn-in period).
+* **model** A list containing the model parameters to be used in the simulation of the form `list(ar, ma, d, sigma)`. The values `ar` and `ma` are matrices of size $(p_x + 1) \times (p_t + 1)$ respective $(q_x + 1) \times (q_t + 1)$ and containing the coefficients in ascending lag order, so that the upper left entry is equal to 1 (for lag 0 in both dimensions). The long-memory parameters $d_x, d_t$ are stored in `d`, a numeical vector of length 2, with $0 < d_x, d_t < 0.5$. The standard deviation of the iid. innovations with zero mean is `sigma`, which should be a single positive number. See the examples in the application part 3.3.
+
+`sfarima.sim` returns an object of class `sfarima` with attribute `"subclass" = "sim"` including the following values:
+
+* **Y** The matrix of simulated values with size $n_x \times n_t$ (determined by function arguments `n_x`, `n_t`). The matrix $Y$ is the lower left $n_x \times n_t$ submatrix of the actually simulated matrix $Y'$ of size $2 n_x \times 2 n_t$ to avoid effects from setting the initial values ("burn-in period").
+* **innov** The $n_x \times n_t$ matrix of iid. normally distributed innovations/errors of the QARMA model with zero mean and variance $\sigma^2$ (determined by the function argument `model\$sigma`). As with `Y`, the original matrix has size $2 n_x \times 2 n_t$.
+* **model** The model used for simulation, inherited from input.
+* **stnry** Indicator variable (boolean) for stationarity of the process.
+
+### `sfarima.est` {-}
+Estimation of a top-left dependent spatial ARMA process (QARMA). This function minimizes the residual sum of squares (RSS) to estimate the SFARIMA-parameters of a given order. It returns an object of class `sfarima` with attribute `"subclass" = "est"`.
+
+Arguments of `sfarima.est` are
+
+* **Y** A (demeaned) matrix of observations, which contains only numeric values and no missing observations.
+* **model_order** A list specifying the order of the SFARIMA to be estimated. This list should be of the form `list(ar = c(1, 1), ma = c(1, 1))`. Obviously, all orders should be non-negative integers. A QARMA$((1,1), (1,1))$ model is estimated by default, if `model_order` is omitted.
+
+`sfarima.est` returns an object of class `sfarima` with attribute `"subclass" = "est"` including the following values:
+
+* **Y** The matrix of observations inherited from input.
+* **innov** The matrix of estimated innovations from the Hannan-Rissanen algorithm.
+* **model** A list of estimated model coefficients containing the matrices `ar` of autoregressive coefficients, the matrix `ma` of moving average coefficients as well as the vector `d` holding the long-memory parameters and the standard deviation of residuals `sigma`.
+* **stnry** Indicator variable (boolean) for stationarity of the process.
+
 ## 2.2 Methods
 The *DCSmooth* package contains the following methods
 
@@ -173,7 +205,7 @@ The *DCSmooth* package contains the following methods
 
 There are three simulated example data sets included in the package. Each data set is a matrix of size $101 \times 101$ computed on $[0,1]^2$ for the following functions:
 
-* **y.norm1** $\mathcal{N} \left( \begin{pmatrix} 0.5 \\ 0.5 \end{pmatrix}, \begin{pmatrix} 0.1 & 0 \\ 0 & 0.1 \end{pmatrix} \right)$
+* **y.norm1** $$\mathcal{N} \left( \begin{pmatrix} 0.5 \\ 0.5 \end{pmatrix}, \begin{pmatrix} 0.05 & 0 \\ 0 & 0.05 \end{pmatrix} \right)$$
 * **y.norm2** $$ \mathcal{N} \left( \begin{pmatrix} 0.5 \\ 0.3 \end{pmatrix}, \begin{pmatrix} 0.1 & 0 \\ 0 & 0.1 \end{pmatrix} \right) + \mathcal{N} \left( \begin{pmatrix} 0.2 \\ 0.8 \end{pmatrix}, \begin{pmatrix} 0.05 & 0 \\ 0 & 0.05 \end{pmatrix} \right) $$
 * **y.norm3** $$ \mathcal{N} \left( \begin{pmatrix} 0.25 \\ 0.75 \end{pmatrix}, \begin{pmatrix} 0.01 & 0 \\ 0 & -0.1 \end{pmatrix} \right) + \mathcal{N} \left( \begin{pmatrix} 0.75 \\ 0.5 \end{pmatrix}, \begin{pmatrix} 0.01 & 0 \\ 0 & -0.1 \end{pmatrix} \right)$$
 
@@ -298,36 +330,49 @@ dcs_qarma_2$var_model
 <!-- ``` -->
 
 ## 3.3 Modelling errors with long memory
-This package includes a bandwidth selection algorithm when the errors $\varepsilon(x, t)$ follow a process with long memory. This process is modeled as a spatial FARIMA (SFARIMA). Estimation under long-memory errors is currently in a experimental state.
+This package includes a bandwidth selection algorithm when the errors $\varepsilon(x, t)$ follow a process with long memory. This process is modeled as SFARIMA. Surface estimation and the corresponding bandwidth selection under long-memory errors is currently in a experimental state.
+
+We use the same spatial ARMA model as in 3.2 with long-memory parameters $d = (0.3, 0.1)$:
 
 ```{r}
+ar_mat = matrix(c(1, 0.4, -0.3, 0.2), nrow = 2, ncol = 2)
+ma_mat = matrix(c(1, 0.2, 0.2, -0.5), nrow = 2, ncol = 2)
+d = c(0.3, 0.1)
+sigma  = 0.5
+model_list = list(ar = ar_mat, ma = ma_mat, d = d, sigma = sigma)
+sim_sfarima = sfarima.sim(n_x = 101, n_t = 101, model = model_list)
+
+# SFARIMA surface observations
+y_sfarima = y.norm1 + sim_sfarima$Y
+# surface.dcs(y_sfarima)
+
 opt_lm = set.options(var_est = "lm")
-dcs_lm = dcs(y_iid, opt_lm)
+dcs_lm = dcs(y_sfarima, opt_lm)
 
 dcs_lm
 dcs_lm$var_model
 ```
 
-## 3.4 Estimation of derivatives
-Local polynomial estimation is suitable for estimation of derivatives of a function or a surface. While estimation of derivatives works as well under dependent errors, the example uses the iid. model from 3.1. Derivatives can be computed for any derivative vector `drv`, if the values are non-negative. Note that the order of the polynomials for the $\nu$th derivative is chosen to be $p_i = \nu_i + 1, i = x, t$. As bandwidths increase with the order of the derivatives, the bandwidth might be large for higher derivative orders.
+<!-- ## 3.4 Estimation of derivatives -->
+<!-- Local polynomial estimation is suitable for estimation of derivatives of a function or a surface. While estimation of derivatives works as well under dependent errors, the example uses the iid. model from 3.1. Derivatives can be computed for any derivative vector `drv`, if the values are non-negative. Note that the order of the polynomials for the $\nu$th derivative is chosen to be $p_i = \nu_i + 1, i = x, t$. As bandwidths increase with the order of the derivatives, the bandwidth might be large for higher derivative orders. -->
 
-The estimator for $m^{(1, 0)}(x, t)$ is given by
-```{r}
-opt_drv_1 = set.options(drv = c(1, 0))
-dcs_drv_1 = dcs(y_iid, opt_drv_1)
+<!-- The estimator for $m^{(1, 0)}(x, t)$ is given by -->
+<!-- ```{r} -->
+<!-- opt_drv_1 = set.options(drv = c(1, 0)) -->
+<!-- dcs_drv_1 = dcs(y_iid, opt_drv_1) -->
 
-dcs_drv_1
-# surface.dcs(dcs_drv_1, plot_choice = 2)
-```
+<!-- dcs_drv_1 -->
+<!-- # surface.dcs(dcs_drv_1, plot_choice = 2) -->
+<!-- ``` -->
 
-The estimator for $m^{(1, 2)}(x, t)$ is
-```{r}
-opt_drv_2 = set.options(drv = c(1, 2))
-dcs_drv_2 = dcs(y_iid, opt_drv_2)
+<!-- The estimator for $m^{(1, 2)}(x, t)$ is -->
+<!-- ```{r} -->
+<!-- opt_drv_2 = set.options(drv = c(1, 2)) -->
+<!-- dcs_drv_2 = dcs(y_iid, opt_drv_2) -->
 
-dcs_drv_2
-# surface.dcs(dcs_drv_2, plot_choice = 2)
-```
+<!-- dcs_drv_2 -->
+<!-- # surface.dcs(dcs_drv_2, plot_choice = 2) -->
+<!-- ``` -->
 
 # 4 Mathematical Background
 

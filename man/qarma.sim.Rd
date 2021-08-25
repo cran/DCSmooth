@@ -30,8 +30,8 @@ The function returns an object of class \code{"qarma"}, consisting of
 }
 }
 \description{
-\code{qarma.sim} is simulates a specified QARMA-model
- on a lattice, with normally distributed innovations.
+\code{qarma.sim} simulates a specified QARMA-model
+ on a lattice with normally distributed innovations.
 }
 \section{Details}{
 

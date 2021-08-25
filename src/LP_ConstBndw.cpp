@@ -52,9 +52,9 @@ arma::mat LPSmooth_matrix2(const arma::mat yMat, const double h,
     arma::mat    xMatSolved{ arma::inv(xWeightBound.t() * xMatBound)
                                 * xWeightBound.t() };
     arma::rowvec xWeightsLeft{ xMatSolved.row(drv) * factorialFunction(drv) /
-                               pow(h, drv) };
+                               std::pow(h, drv) };
     // pow(-1, drv) ensures the correct sign
-    arma::rowvec xWeightsRight{ pow(-1, drv) * xWeightsLeft };
+    arma::rowvec xWeightsRight{ std::pow(-1, drv) * xWeightsLeft };
 
     // calculation of estimates (complete column)
     yMatOut.col(colIndex) = yMat.cols(0, xBound.n_rows - 1) * xWeightsLeft.t();
@@ -72,7 +72,7 @@ arma::mat LPSmooth_matrix2(const arma::mat yMat, const double h,
     arma::mat xMatSolved{ arma::inv(xMatWeight.t() * xMatInterior)
       * xMatWeight.t() };         // compute inv(X*W*X)^(-1)*X*W only once here
     arma::rowvec xWeightsVec{ xMatSolved.row(drv) *  factorialFunction(drv) /
-                              pow(h, drv) };
+                              std::pow(h, drv) };
 
     // Loops smooth over the columns, conditional on rows. That is, every row is
     // consiedered to be an individual time series. To speed up computation, the

@@ -14,7 +14,7 @@ y.norm1
 Example data for using the DCSmooth functions. Data resembles a single
   gaussian peak on the interval \eqn{[0,1] \times [0,1]}{[0,1] x [0,1]}
   with maximum at \eqn{(0.5, 0.5)} and variance matrix \eqn{0.1 \cdot
- {\bf I}}{0.1 I}, where 
+ {\bf I}}{0.05 I}, where 
   \eqn{{\bf I}}{I} represents the \eqn{2 \times 2}{2 x 2} identity matrix.
 }
 \keyword{datasets}

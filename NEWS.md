@@ -1,4 +1,7 @@
 # DCSmooth 1.0.1
+* Functions for estimation and simulation of SFARIMA(p, q, d) added.
+
+# DCSmooth 1.0.1
 * Estimation for SFARIMA errors is now with ML estimation
 
 # DCSmooth 1.0.0

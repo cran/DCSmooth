@@ -77,23 +77,20 @@ dcs_qarma_2
 dcs_qarma_2$var_model
 
 ## -----------------------------------------------------------------------------
+ar_mat = matrix(c(1, 0.4, -0.3, 0.2), nrow = 2, ncol = 2)
+ma_mat = matrix(c(1, 0.2, 0.2, -0.5), nrow = 2, ncol = 2)
+d = c(0.3, 0.1)
+sigma  = 0.5
+model_list = list(ar = ar_mat, ma = ma_mat, d = d, sigma = sigma)
+sim_sfarima = sfarima.sim(n_x = 101, n_t = 101, model = model_list)
+
+# SFARIMA surface observations
+y_sfarima = y.norm1 + sim_sfarima$Y
+# surface.dcs(y_sfarima)
+
 opt_lm = set.options(var_est = "lm")
-dcs_lm = dcs(y_iid, opt_lm)
+dcs_lm = dcs(y_sfarima, opt_lm)
 
 dcs_lm
 dcs_lm$var_model
-
-## -----------------------------------------------------------------------------
-opt_drv_1 = set.options(drv = c(1, 0))
-dcs_drv_1 = dcs(y_iid, opt_drv_1)
-
-dcs_drv_1
-# surface.dcs(dcs_drv_1, plot_choice = 2)
-
-## -----------------------------------------------------------------------------
-opt_drv_2 = set.options(drv = c(1, 2))
-dcs_drv_2 = dcs(y_iid, opt_drv_2)
-
-dcs_drv_2
-# surface.dcs(dcs_drv_2, plot_choice = 2)
 
