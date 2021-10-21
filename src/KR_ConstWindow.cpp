@@ -55,7 +55,8 @@ arma::mat KRSmooth_matrix(arma::mat yMat, double h, int drv, SEXP kernFcnPtr)
 
     // calculation of estimates (complete columns)
     yMatOut.col(colIndex) = yLeftMat * weightsBound;
-    yMatOut.col(nCol - colIndex - 1) =  yRightMat * reverse(weightsBound);
+    yMatOut.col(nCol - colIndex - 1) =  std::pow(-1, drv) * 
+                                        yRightMat * reverse(weightsBound);
   }
 
   // smoothing over interior values

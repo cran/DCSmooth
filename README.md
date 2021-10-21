@@ -22,28 +22,21 @@ You can install the released version of DCSmooth from
 install.packages("DCSmooth")
 ```
 
-And the development version from [GitHub](https://github.com/) with:
+    ## Example
 
-``` r
-# install.packages("devtools")
-devtools::install_github("BSchae/DCSmooth")
-```
+    This basic example shows the two-dimensional estimation of a single gaussian peak
+    function (in `y.norm1`).
 
-## Example
 
-This basic example shows the twodimensional estimation of a single
-gaussian peak function (in `y.norm1`).
+    ```r
+    library(DCSmooth)
 
-``` r
-library(DCSmooth)
+    # simulated data
+    y = y.norm1 + matrix(rnorm(101^2), nrow = 101, ncol = 101)
 
-# simulated data
-y = y.norm1 + matrix(rnorm(101^2), nrow = 101, ncol = 101)
-
-# smooth trend surface
-y_dcs = dcs(y)
-plot(y_dcs, plot_choice = 2)
-```
+    # smooth trend surface
+    y_dcs = dcs(y)
+    plot(y_dcs, plot_choice = 2)
 
 <img src="man/figures/README-example-1.png" width="100%" />
 

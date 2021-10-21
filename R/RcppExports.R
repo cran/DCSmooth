@@ -29,42 +29,6 @@ KR_dcs_const1 <- function(yMat, hVec, drvVec, kernFcnPtrX, kernFcnPtrT) {
     .Call('_DCSmooth_KR_dcs_const1', PACKAGE = 'DCSmooth', yMat, hVec, drvVec, kernFcnPtrX, kernFcnPtrT)
 }
 
-weight_fcn_assign <- function(fstr) {
-    .Call('_DCSmooth_weight_fcn_assign', PACKAGE = 'DCSmooth', fstr)
-}
-
-kernFkt_MW210 <- function(u, q = 1) {
-    .Call('_DCSmooth_kernFkt_MW210', PACKAGE = 'DCSmooth', u, q)
-}
-
-kernFkt_MW220 <- function(uVec, q) {
-    .Call('_DCSmooth_kernFkt_MW220', PACKAGE = 'DCSmooth', uVec, q)
-}
-
-kernFkt_MW320 <- function(u, q = 1) {
-    .Call('_DCSmooth_kernFkt_MW320', PACKAGE = 'DCSmooth', u, q)
-}
-
-kernFkt_MW420 <- function(uVec, q) {
-    .Call('_DCSmooth_kernFkt_MW420', PACKAGE = 'DCSmooth', uVec, q)
-}
-
-kernFkt_MW421 <- function(uVec, q) {
-    .Call('_DCSmooth_kernFkt_MW421', PACKAGE = 'DCSmooth', uVec, q)
-}
-
-kernFkt_MW422 <- function(uVec, q) {
-    .Call('_DCSmooth_kernFkt_MW422', PACKAGE = 'DCSmooth', uVec, q)
-}
-
-kernFkt_TR420 <- function(uVec, q) {
-    .Call('_DCSmooth_kernFkt_TR420', PACKAGE = 'DCSmooth', uVec, q)
-}
-
-kernFkt_TR422 <- function(uVec, q) {
-    .Call('_DCSmooth_kernFkt_TR422', PACKAGE = 'DCSmooth', uVec, q)
-}
-
 kernel_fcn_assign <- function(fstr) {
     .Call('_DCSmooth_kernel_fcn_assign', PACKAGE = 'DCSmooth', fstr)
 }
@@ -73,12 +37,100 @@ kernel_fcn_use <- function(x, q, xpsexp) {
     .Call('_DCSmooth_kernel_fcn_use', PACKAGE = 'DCSmooth', x, q, xpsexp)
 }
 
-LPSmooth_matrix2 <- function(yMat, h, polyOrder, drv, kernFcnPtr) {
-    .Call('_DCSmooth_LPSmooth_matrix2', PACKAGE = 'DCSmooth', yMat, h, polyOrder, drv, kernFcnPtr)
+weight_fcn_assign <- function(fstr) {
+    .Call('_DCSmooth_weight_fcn_assign', PACKAGE = 'DCSmooth', fstr)
 }
 
-LP_dcs_const0 <- function(yMat, hVec, polyOrderVec, drvVec, kernFcnPtr_x, kernFcnPtr_t) {
-    .Call('_DCSmooth_LP_dcs_const0', PACKAGE = 'DCSmooth', yMat, hVec, polyOrderVec, drvVec, kernFcnPtr_x, kernFcnPtr_t)
+kern_fcn_M200 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_M200', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_M210 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_M210', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_M220 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_M220', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_M321 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_M321', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_M420 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_M420', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_M421 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_M421', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_M422 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_M422', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_M533 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_M533', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_M644 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_M644', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_MW200 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_MW200', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_MW210 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_MW210', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_MW220 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_MW220', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_MW320 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_MW320', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_MW321 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_MW321', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_MW420 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_MW420', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_MW421 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_MW421', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_MW422 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_MW422', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_MW533 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_MW533', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_MW644 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_MW644', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_T220 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_T220', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_T321 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_T321', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_T420 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_T420', PACKAGE = 'DCSmooth', uVec, q)
+}
+
+kern_fcn_T422 <- function(uVec, q = 1) {
+    .Call('_DCSmooth_kern_fcn_T422', PACKAGE = 'DCSmooth', uVec, q)
 }
 
 LPSmooth_matrix2_BMod <- function(yMat, h, polyOrder, drv, mu, weightFcnPtr) {
@@ -89,19 +141,27 @@ LP_dcs_const0_BMod <- function(yMat, hVec, polyOrderVec, drvVec, muVec, weightFc
     .Call('_DCSmooth_LP_dcs_const0_BMod', PACKAGE = 'DCSmooth', yMat, hVec, polyOrderVec, drvVec, muVec, weightFcnPtr_x, weightFcnPtr_t)
 }
 
-LPSmooth_matrix <- function(yMat, h, polyOrder, drv, kernFcnPtr) {
-    .Call('_DCSmooth_LPSmooth_matrix', PACKAGE = 'DCSmooth', yMat, h, polyOrder, drv, kernFcnPtr)
-}
-
-LP_dcs_const1 <- function(yMat, hVec, polyOrderVec, drvVec, kernFcnPtr_x, kernFcnPtr_t) {
-    .Call('_DCSmooth_LP_dcs_const1', PACKAGE = 'DCSmooth', yMat, hVec, polyOrderVec, drvVec, kernFcnPtr_x, kernFcnPtr_t)
-}
-
 LPSmooth_matrix_BMod <- function(yMat, h, polyOrder, drv, mu, weightFcnPtr) {
     .Call('_DCSmooth_LPSmooth_matrix_BMod', PACKAGE = 'DCSmooth', yMat, h, polyOrder, drv, mu, weightFcnPtr)
 }
 
 LP_dcs_const1_BMod <- function(yMat, hVec, polyOrderVec, drvVec, muVec, weightFcnPtr_x, weightFcnPtr_t) {
     .Call('_DCSmooth_LP_dcs_const1_BMod', PACKAGE = 'DCSmooth', yMat, hVec, polyOrderVec, drvVec, muVec, weightFcnPtr_x, weightFcnPtr_t)
+}
+
+ar_coef <- function(ar, ma, d, k) {
+    .Call('_DCSmooth_ar_coef', PACKAGE = 'DCSmooth', ar, ma, d, k)
+}
+
+ARMA_to_AR <- function(phi, psi, K) {
+    .Call('_DCSmooth_ARMA_to_AR', PACKAGE = 'DCSmooth', phi, psi, K)
+}
+
+sarma_rss <- function(theta, R_mat, model_order) {
+    .Call('_DCSmooth_sarma_rss', PACKAGE = 'DCSmooth', theta, R_mat, model_order)
+}
+
+sfarima_rss <- function(theta, R_mat, model_order) {
+    .Call('_DCSmooth_sfarima_rss', PACKAGE = 'DCSmooth', theta, R_mat, model_order)
 }
 

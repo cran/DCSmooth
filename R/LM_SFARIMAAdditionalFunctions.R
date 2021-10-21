@@ -1,8 +1,13 @@
 ################################################################################
 #                                                                              #
-#                DCSmooth Package: additional Functions for SFARIMA              #
+#                DCSmooth Package: Additional Functions for SFARIMA            #
 #                                                                              #
 ################################################################################
+
+### Functions related to SFARIMA but not directly linked to estimation
+
+  # sfarima.sim
+  # macoef (UNUSED?)
 
 #----------------------------Simulation Function-------------------------------#
 
@@ -44,26 +49,26 @@
 #' @examples
 #' # See vignette("DCSmooth") for examples and explanation
 #'  
-#' ma = matrix(c(1, 0.2, 0.4, 0.1), nrow = 2, ncol = 2)
-#' ar = matrix(c(1, 0.5, -0.1, 0.1), nrow = 2, ncol = 2)
-#' d = c(0.1, 0.1)
-#' sigma = 0.5
-#' sfarima_model = list(ar = ar, ma = ma, d = d, sigma = sigma)
+#' ma <- matrix(c(1, 0.2, 0.4, 0.1), nrow = 2, ncol = 2)
+#' ar <- matrix(c(1, 0.5, -0.1, 0.1), nrow = 2, ncol = 2)
+#' d <- c(0.1, 0.1)
+#' sigma <- 0.5
+#' sfarima_model <- list(ar = ar, ma = ma, d = d, sigma = sigma)
 #' 
-#' sfarima_sim = sfarima.sim(100, 100, model = sfarima_model)
+#' sfarima_sim <- sfarima.sim(100, 100, model = sfarima_model)
 #' surface.dcs(sfarima_sim$Y)
 #' 
 #' @export
 
 sfarima.sim <- function(n_x, n_t, model)
 {
-  ar_mat = as.matrix(model$ar); ma_mat = as.matrix(model$ma)
-  ar_x = -ar_mat[-1, 1]; ar_t = -ar_mat[1, -1]
-  ma_x = ma_mat[-1, 1]; ma_t = ma_mat[1, -1]
+  ar_mat <- as.matrix(model$ar); ma_mat = as.matrix(model$ma)
+  ar_x <- -ar_mat[-1, 1]; ar_t = -ar_mat[1, -1]
+  ma_x <- ma_mat[-1, 1]; ma_t = ma_mat[1, -1]
   
   # check if provided model is correctly specified
-  if (isFALSE(all.equal(as.matrix(ar_mat[-1, -1]), ar_x %*% ar_t))  ||
-      isFALSE(all.equal(as.matrix(ma_mat[-1, -1]), ma_x %*% ma_t)))
+  if (isFALSE(all.equal(as.matrix(ar_mat[-1, -1]), ar_x %*% t(ar_t)))  ||
+      isFALSE(all.equal(as.matrix(ma_mat[-1, -1]), ma_x %*% t(ma_t))))
   {
     warning("Provided coefficient matrices do not specify a separable process.")
   }
@@ -72,87 +77,123 @@ sfarima.sim <- function(n_x, n_t, model)
     stop("Long memory parameter \"d\" incorrectly specified.")
   }
   
-
   # meta options
-  nstart = max(floor(1.5 * c(n_x, n_t)), 150)
-  k_x = min(50, n_x); k_t = min(50, n_t)
+  nstart <- max(floor(1.5 * c(n_x, n_t)), 150)
+  k_x <- min(50, n_x); k_t = min(50, n_t)
   
-  n_x = n_x + nstart
-  n_t = n_t + nstart
-  eps_mat = matrix(stats::rnorm(n_x * n_t), n_x, n_t) * model$sigma
+  n_x <- n_x + nstart
+  n_t <- n_t + nstart
+  eps_mat <- matrix(stats::rnorm(n_x * n_t), n_x, n_t) * model$sigma
   
-  ma_inf_x = c(1, stats::ARMAtoMA(ar = ar_x, ma = ma_x, lag.max = k_x))
-  d_x = choose(-model$d[1], 0:k_x) * ((-1)^(0:k_x))
-  coef_x = cumsum_part_reverse(d_x, ma_inf_x)
+  ma_inf_x <- c(1, stats::ARMAtoMA(ar = ar_x, ma = ma_x, lag.max = k_x))
+  d_x <- choose(-model$d[1], 0:k_x) * ((-1)^(0:k_x))
+  coef_x <- cumsum_part_reverse(d_x, ma_inf_x)
   
-  ma_inf_t = t(c(1, stats::ARMAtoMA(ar = ar_t, ma = ma_t, lag.max = k_t)))
-  d_t = choose(-model$d[2], 0:k_t) * ((-1)^(0:k_t))
-  coef_t = cumsum_part_reverse(d_t, ma_inf_t)
+  ma_inf_t <- t(c(1, stats::ARMAtoMA(ar = ar_t, ma = ma_t, lag.max = k_t)))
+  d_t <- choose(-model$d[2], 0:k_t) * ((-1)^(0:k_t))
+  coef_t <- cumsum_part_reverse(d_t, ma_inf_t)
   
-  X1.sim = X2.sim = matrix(0, n_x, n_t)
+  X1.sim <- X2.sim <- matrix(0, n_x, n_t)
 
   for(j in 1:n_t) {
     if (j <= k_t) {
-      X2.sim[, j] = eps_mat[, j:1, drop = FALSE] %*% coef_t[1:j, drop = FALSE] 
+      X2.sim[, j] <- eps_mat[, j:1, drop = FALSE] %*% coef_t[1:j, drop = FALSE] 
     }
     else {
-      X2.sim[, j] = eps_mat[, j:(j - k_t)] %*% coef_t
+      X2.sim[, j] <- eps_mat[, j:(j - k_t)] %*% coef_t
     }
   }
   for(i in 1:n_x) {
     if (i <= k_x) {
-      X1.sim[i, ] = coef_x[1:i, drop = FALSE] %*% X2.sim[i:1, , drop = FALSE]
+      X1.sim[i, ] <- coef_x[1:i, drop = FALSE] %*% X2.sim[i:1, , drop = FALSE]
     }
     else {
-      X1.sim[i, ] = t(coef_x) %*% X2.sim[i:(i - k_x), ]
+      X1.sim[i, ] <- t(coef_x) %*% X2.sim[i:(i - k_x), ]
     }
   }
     
-  sfarima_out = X1.sim[(nstart + 1):n_x, (nstart + 1):n_t]
-  error_out = eps_mat[(nstart + 1):n_x, (nstart + 1):n_t]
-  coef_out = list(Y = sfarima_out, innov = error_out, model = model,
+  sfarima_out <- X1.sim[(nstart + 1):n_x, (nstart + 1):n_t]
+  error_out <- eps_mat[(nstart + 1):n_x, (nstart + 1):n_t]
+  coef_out <- list(Y = sfarima_out, innov = error_out, model = model,
                   stnry = TRUE)
-  class(coef_out) = "sfarima"
-  attr(coef_out, "subclass") = "sim"
+  class(coef_out) <- "sfarima"
+  attr(coef_out, "subclass") <- "sim"
     
   return(coef_out)
 }
 
-#----------------------------------------------------------------#
+#--------------------BIC/AIC ORDER SELECTION FOR SFARIMA-----------------------#
 
-macoef <- function(ar = 0, ma = 0, d = 0, k = 50) {
-  p = length(ar[ar != 0])
-  q = length(ma[ma != 0])
-  if (p == 0) {
-    ar = 0
+sfarima.ord <- function(Rmat, pmax = c(0, 0), qmax = c(0, 0), crit = "bic",
+                        restr = NULL, sFUN = min, parallel = TRUE)
+{
+  if(crit == "bic") {
+    crit.fun = stats::BIC
   }
-  if (q == 0) {
-    ma = 0
+  else if (crit == "aic") {
+    crit.fun = stats::AIC
   }
-  ma.coef = c(1, ma, rep(0, k - q))
-  arma.coef = (1:(k + 1)) * 0
-  arma.coef[1] = 1
   
-  if (p > 0 | q > 0) {
-    for (i in 2:(k + 1)) {
-      if ((i - p) < 1) {
-        arma.coef[i] = sum(ar[1:(p - abs(i - p) - 1)] * arma.coef[(i - 1):1]) - ma.coef[i]
-      } else {
-        arma.coef[i] = sum(ar[1:p] * arma.coef[(i - 1):(i - p)]) - ma.coef[i]
+  bic_x =  matrix(0, pmax[1] + 1, qmax[1] + 1)
+  bic_t =  matrix(0, pmax[2] + 1, qmax[2] + 1)
+  R_x = as.vector(Rmat)
+  R_t = as.vector(t(Rmat))
+  
+  if (parallel == TRUE)
+  {
+    n.cores = parallel::detectCores(logical = TRUE) - 1
+    doParallel::registerDoParallel(n.cores)
+    
+    `%dopar%` = foreach::`%dopar%`
+    `%:%` = foreach::`%:%`
+    
+    bic_x = foreach::foreach(i = 1:(pmax[1] + 1), .combine = "rbind") %:%
+      foreach::foreach(j = 1:(qmax[1] + 1), .combine = "c") %dopar%
+      {
+        bic = crit.fun(suppressWarnings(fracdiff::fracdiff(R_x, nar = i - 1,
+                                                           nma = j - 1, drange = c(0, 0.5))))
+      }
+    
+    bic_t = foreach::foreach(i = 1:(pmax[2] + 1), .combine = "rbind") %:%
+      foreach::foreach(j = 1:(qmax[2] + 1), .combine = "c") %dopar%
+      {
+        bic = crit.fun(suppressWarnings(fracdiff::fracdiff(R_t, nar = i - 1,
+                                                           nma = j - 1, drange = c(0, 0.5))))
+      }
+    
+    doParallel::stopImplicitCluster()
+  } else {
+    for (i in 1:(pmax[1] + 1))
+    {
+      for (j in 1:(qmax[1] + 1))
+      {
+        bic_x[i, j] = crit.fun(suppressWarnings(fracdiff::fracdiff(R_x,
+                                                                   nar = i - 1, nma = j - 1, drange = c(0, 0.5))))
       }
     }
+    for (i in 1:(pmax[2] + 1))
+    {
+      for (j in 1:(qmax[2] + 1))
+      {
+        bic_t[i, j] = crit.fun(suppressWarnings(fracdiff::fracdiff(R_t,
+                                                                   nar = i - 1, nma = j - 1, drange = c(0, 0.5))))
+      }
+    }
+  }
+  
+  restr = substitute(restr)
+  if(!is.null(restr)){
+    ord.opt_x <- c(which(bic_x == sFUN(bic_x[eval(restr)]), arr.ind = TRUE) - 1)
+    ord.opt_t <- c(which(bic_t == sFUN(bic_t[eval(restr)]), arr.ind = TRUE) - 1)
   } else {
-    arma.coef + 1
+    ord.opt_x <- c(which(bic_x == sFUN(bic_x), arr.ind = TRUE) - 1)
+    ord.opt_t <- c(which(bic_t == sFUN(bic_t), arr.ind = TRUE) - 1)
   }
   
-  d.coef = choose(-d, 0:k) * ((-1)^(0:k))
+  # put model_orders into list
+  ar = c(ord.opt_x[1], ord.opt_t[1])
+  ma = c(ord.opt_x[2], ord.opt_t[2])
+  model_order = list(ar = ar, ma = ma)
   
-  coef.all = (1:(k + 1)) * 0
-  for (j in 1:(k + 1)) {
-    coef.all[j] = sum(d.coef[1:j] * arma.coef[j:1])
-  }
-  return(coef.all)
+  return(model_order)   
 }
-
-
-

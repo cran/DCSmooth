@@ -1,15 +1,9 @@
 // [[Rcpp::depends(RcppArmadillo)]]
 #include <RcppArmadillo.h>
 #include "DCSmooth_types.h"
+#include "DCSmooth_kernels.h"
 
 using namespace Rcpp;
-
-arma::vec kernFkt_MW200(arma::vec&, double);
-arma::vec kernFkt_MW210(arma::vec&, double);
-arma::vec kernFkt_MW220(arma::vec&, double);
-arma::vec kernFkt_MW320(arma::vec&, double);
-arma::vec kernFkt_MW420(arma::vec&, double);
-arma::vec kernFkt_MW422(arma::vec&, double);
 
 //---------------------------------------------------------------------------//
 //                    Kernel Regression Functions                            //
@@ -60,7 +54,8 @@ arma::mat KRSmooth_matrix2(arma::mat yMat, double h, int drv,  SEXP kernFcnPtr)
     arma::mat     yRightMat{ yMat.cols(nCol - uBound.n_rows, nCol - 1) };
     
     yMatOut.col(colIndex) = yLeftMat * weightsBound;
-    yMatOut.col(nCol - colIndex - 1) = yRightMat * reverse(weightsBound);
+    yMatOut.col(nCol - colIndex - 1) = std::pow(-1, drv) * yRightMat * 
+                                       arma::reverse(weightsBound);
   }
   return yMatOut;
 }

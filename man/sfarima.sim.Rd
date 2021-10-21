@@ -47,13 +47,13 @@ innovations are created from a normal distribution with specified variance
 \examples{
 # See vignette("DCSmooth") for examples and explanation
  
-ma = matrix(c(1, 0.2, 0.4, 0.1), nrow = 2, ncol = 2)
-ar = matrix(c(1, 0.5, -0.1, 0.1), nrow = 2, ncol = 2)
-d = c(0.1, 0.1)
-sigma = 0.5
-sfarima_model = list(ar = ar, ma = ma, d = d, sigma = sigma)
+ma <- matrix(c(1, 0.2, 0.4, 0.1), nrow = 2, ncol = 2)
+ar <- matrix(c(1, 0.5, -0.1, 0.1), nrow = 2, ncol = 2)
+d <- c(0.1, 0.1)
+sigma <- 0.5
+sfarima_model <- list(ar = ar, ma = ma, d = d, sigma = sigma)
 
-sfarima_sim = sfarima.sim(100, 100, model = sfarima_model)
+sfarima_sim <- sfarima.sim(100, 100, model = sfarima_model)
 surface.dcs(sfarima_sim$Y)
 
 }

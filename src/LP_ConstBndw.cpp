@@ -9,96 +9,98 @@ using namespace Rcpp;
 //---------------------------------------------------------------------------//
 
 // [[Rcpp::export]]
-arma::mat LPSmooth_matrix2(const arma::mat yMat, const double h,
-                           const int polyOrder, const int drv, SEXP kernFcnPtr)
+arma::mat LPSmooth_matrix2_BMod(const arma::mat yMat, const double h,
+                                const int polyOrder, const int drv,
+                                const int mu, SEXP weightFcnPtr)
 {
   // get additional information on nX, nT, bndw etc.
   int nRow{ static_cast<int>(yMat.n_rows) };
   int nCol{ static_cast<int>(yMat.n_cols) };
-  int bndw{ std::max(static_cast<int>(h * nCol), polyOrder + 1) };
+  int bndw{ static_cast<int>(std::ceil(h * (nCol - 1)) - 1) };
                         // calculate absolute bandwidth, decimals will be dumped
-  int windowWidth{ 2*bndw + 1 };  // width of estimation window
-
-  // result matrix
-  arma::mat yMatOut(nRow, nCol);
-
-  // enable Kernel function
-  XPtr<funcPtr> xpfun(kernFcnPtr);
-  funcPtr kernFcn = *xpfun;
-
-  // calculate weights
-  arma::colvec  uVec{ arma::regspace(bndw, -bndw)/std::max(h * nCol + 1,
-                        static_cast<double>(polyOrder + 1)) }; // vector from -1 to 1 to compute weights
-  arma::colvec  xVec{ arma::regspace(-bndw, bndw)/std::max(h * nCol,
-                        static_cast<double>(polyOrder + 1)) }; // vector from -1 to 1 to compute weights
-  arma::colvec  weightsVec{ (kernFcn(uVec, 1)) };         // computation of weights // sqrt removed
-
+  if (bndw < polyOrder + 1)
+  {
+    stop("Bandwidth h must be larger for local polynomial regression.");
+  }                     // exception to ensure the matrix X^TWX can be inverted
+  
+  arma::mat yMatOut(nRow, nCol);   // result matrix
+  
+  // enable weight function
+  XPtr<weightPtr> xpfun(weightFcnPtr);
+  weightPtr weightFcn = *xpfun;
+  
   // smoothing over boundaries
-  for (int colIndex{ 0 }; colIndex < bndw; ++colIndex)
+  for (int colIndex{ 0 }; colIndex < bndw + 1; ++colIndex)
   {
     if (colIndex == (nCol/2) + 1)     // break condition, if bndw > 0.5*nCol
     {
       break;
     }
+      // calculate kernel weights
+    double q{ static_cast<double>(colIndex)/bndw };
+    arma::colvec xBound{ arma::regspace(-colIndex, std::min(bndw,
+                         nCol - colIndex - 1)) / (nCol - 1) };
+                                // vector for exogenous variables. is [q, -1]
+    arma::colvec uBound{ - xBound / h };
+    arma::colvec wBound{ (weightFcn(uBound, q, mu)) };
+                                // computation of weights
 
-    int startIndex{ bndw - colIndex };
-    int stopIndex{ std::min(windowWidth - 1, startIndex + nCol - 1) };
-
-    // calculate weights for linear regression
-    arma::colvec weightsBound{ weightsVec.subvec(startIndex, stopIndex) };
-    arma::colvec xBound{ xVec.subvec(startIndex, stopIndex) };
+    // calculate regression weights for linear regression
     arma::mat    xMatBound{ xMatrix(xBound, polyOrder) };
-    arma::mat    xWeightBound{ weightMatrix(weightsBound, xMatBound) };
-    arma::mat    xMatSolved{ arma::inv(xWeightBound.t() * xMatBound)
-                                * xWeightBound.t() };
-    arma::rowvec xWeightsLeft{ xMatSolved.row(drv) * factorialFunction(drv) /
-                               std::pow(h, drv) };
-    // pow(-1, drv) ensures the correct sign
-    arma::rowvec xWeightsRight{ std::pow(-1, drv) * xWeightsLeft };
+    arma::mat    xMatWeight{ weightMatrix(wBound, xMatBound) };
+    arma::mat    weightsMat{ arma::inv(xMatWeight.t() * xMatBound) *
+                             xMatWeight.t() };
 
-    // calculation of estimates (complete column)
-    yMatOut.col(colIndex) = yMat.cols(0, xBound.n_rows - 1) * xWeightsLeft.t();
-    yMatOut.col(nCol - colIndex - 1) = arma::reverse(yMat.cols(nCol -
-                              xBound.n_rows, nCol - 1), 1) * xWeightsRight.t();
+    arma::rowvec weightsLeft{ factorialFunction(drv) * weightsMat.row(drv) };
+    arma::rowvec weightsRight{ std::pow(-1, drv) * weightsLeft }; // pow(-1, drv) ensures the correct sign
+      // calculation of estimates (complete column)
+    yMatOut.col(colIndex) = yMat.cols(0, xBound.n_rows - 1) * weightsLeft.t();
+    yMatOut.col(nCol - colIndex - 1) = yMat.cols(nCol - uBound.n_rows, 
+                                    nCol - 1) * arma::reverse(weightsRight.t());
   }
 
+    // smoothing over the interior
   if (h < 0.5)
   {
-    // smothing over interior values
-    arma::mat yInterior(nRow, windowWidth); // empty vector for use inside loop
-    arma::mat coefMat(polyOrder, windowWidth);    // empty matrix for lm results
-    arma::mat xMatInterior{ xMatrix(xVec, polyOrder) };  // compute x-matrix for lm-regression
-    arma::mat xMatWeight{ weightMatrix(weightsVec, xMatInterior) };
-    arma::mat xMatSolved{ arma::inv(xMatWeight.t() * xMatInterior)
-      * xMatWeight.t() };         // compute inv(X*W*X)^(-1)*X*W only once here
-    arma::rowvec xWeightsVec{ xMatSolved.row(drv) *  factorialFunction(drv) /
-                              std::pow(h, drv) };
-
+    // calculate weights for interior smoothing
+    arma::colvec xVec{ arma::regspace(-bndw, bndw) / (nCol - 1) };
+    arma::colvec uVec{ - xVec / h };
+    arma::colvec wVec{ weightFcn(uVec, 1, mu) };
+    
+    arma::mat xMatInterior{ xMatrix(xVec, polyOrder) };
+    arma::mat xWeightsInterior{ weightMatrix(wVec, xMatInterior) };
+    arma::mat weightsMat{ arma::inv(xWeightsInterior.t() * xMatInterior) *
+      xWeightsInterior.t() * factorialFunction(drv) };
+    arma::rowvec weightsInterior{ weightsMat.row(drv) };
+    
     // Loops smooth over the columns, conditional on rows. That is, every row is
-    // consiedered to be an individual time series. To speed up computation, the
+    // considered to be an individual time series. To speed up computation, the
     // smoothing order is inverted (computing of weights only once per column, as
     // the weights are the same on a grid)
-    for (int colIndex{ bndw }; colIndex < (nCol - bndw); ++colIndex)                  // outer loop over columns
+    for (int colIndex{ bndw + 1 }; colIndex < (nCol - bndw - 1); ++colIndex)
     {
-      yInterior  = yMat.cols(colIndex - bndw, colIndex + bndw);
-      yMatOut.col(colIndex) = yInterior * xWeightsVec.t();
+      arma::mat yInterior{ yMat.cols(colIndex - bndw, colIndex + bndw) };
+      yMatOut.col(colIndex) = yInterior * weightsInterior.t();
     }
   }
-
+  
   return yMatOut;
 }
 
 //---------------------------------------------------------------------------//
 
 // [[Rcpp::export]]
-arma::mat LP_dcs_const0(arma::mat yMat, arma::colvec hVec,
+arma::mat LP_dcs_const0_BMod(arma::mat yMat, arma::colvec hVec,
                        arma::icolvec polyOrderVec, arma::icolvec drvVec,
-                       SEXP kernFcnPtr_x, SEXP kernFcnPtr_t)
+                       arma::icolvec muVec, SEXP weightFcnPtr_x, 
+                       SEXP weightFcnPtr_t)
 {
-  arma::mat mMatTemp{ LPSmooth_matrix2(yMat, hVec(1), polyOrderVec(1),
-                                       drvVec(1), kernFcnPtr_t) };
-  arma::mat yMatOut{ LPSmooth_matrix2(mMatTemp.t(), hVec(0), polyOrderVec(0),
-                                      drvVec(0), kernFcnPtr_x) };
+  arma::mat mMatTemp{ LPSmooth_matrix2_BMod(yMat, hVec(1), polyOrderVec(1),
+                                            drvVec(1), muVec(1),
+                                            weightFcnPtr_t) };
+  arma::mat yMatOut{ LPSmooth_matrix2_BMod(mMatTemp.t(), hVec(0), 
+                                           polyOrderVec(0), drvVec(0), muVec(0),
+                                           weightFcnPtr_x) };
 
   return yMatOut.t();
 }

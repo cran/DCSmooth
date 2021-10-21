@@ -4,11 +4,15 @@
 \alias{surface.dcs}
 \title{3D Surface Plot of "dcs"-object or numeric matrix}
 \usage{
-surface.dcs(Y, plot_choice = "choice", ...)
+surface.dcs(Y, trim = c(0, 0), plot_choice = "choice", ...)
 }
 \arguments{
 \item{Y}{an object of class \code{"dcs"} or a numeric matrix that contains the
 values to be plotted.}
+
+\item{trim}{a numeric vector with two values specifying the percentage of
+trimming applied to the boundaries of the surface to plot. Useful for
+derivative estimation.}
 
 \item{plot_choice}{override the prompt to specify a plot, can be 
 \code{c(1, 2, 3)}.}
@@ -32,8 +36,8 @@ values to be plotted.}
 \examples{
 # See vignette("DCSmooth") for examples and explanation
 
-smth =  dcs(y.norm1 + rnorm(101^2))
-surface.dcs(smth, plot_choice = 2)
+smth <-  dcs(y.norm1 + rnorm(101^2))
+surface.dcs(smth, trim = c(0.05, 0.05), plot_choice = 2)
 
 }
 \seealso{

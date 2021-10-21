@@ -8,6 +8,17 @@
 # ity with the requirements of the package. They stop the function and return an
 # error, if something wrong.
 
+  # exception.check.Y
+  # exception.check.XT
+  # exception.check.bndw
+  # exception.check.args_list
+  # exception.check.parallel
+  # exception.check.options.input
+  # exception.check.options
+  # exception.check.model_order
+  # exception.check.order_max
+  # exception.check.model.sarma
+
 #----------------------Check Matrix of Observations Y--------------------------#
 
 exception.check.Y = function(Y)
@@ -77,19 +88,36 @@ exception.check.bndw = function(bndw, dcs_options)
     {
       stop("Bandwidth h must be < 0.45 for kernel regression")
     } 
-      
-    # if (any(bndw > 0.5))
-    # {
-    #   warning("Bandwidth h seems unusually high, computation time might be",
-    #          "increased.")
-    # }  
+  }
+}
+
+#-------------------------------Check args_list--------------------------------#
+
+exception.check.args_list = function(args_list)
+{
+  if (any(!(names(args_list) %in% dcs_list_args_dcs)))
+  {
+    index = which(!(names(args_list) %in% dcs_list_args_dcs))
+    warning("Additional argument(s) \"", names(args_list)[index], 
+            "\" are unsupported and will be ignored.")
+  }
+}
+
+#--------------------------Check parallel Options------------------------------#
+
+exception.check.parallel = function(parallel)
+{
+  if (!is.logical(parallel) || length(parallel) != 1)
+  {
+    stop("Unsupported value in argument \"parallel\".")
   }
 }
 
 #-----------------------Check for correct Options------------------------------#
 
 # Check input for set.options()
-exception.check.options.input = function(type, kerns, drv, var_est, IPI_options)
+exception.check.options.input = function(type, kerns, drv, var_model,
+                                         IPI_options)
 {
   if (length(type) != 1 || !(type %in% c("LP", "KR")))
   {
@@ -103,11 +131,10 @@ exception.check.options.input = function(type, kerns, drv, var_est, IPI_options)
   {
     stop("Unsupported values in argument \"drv\".")
   }
-  if (!(var_est %in% c("iid", "qarma", "qarma_gpac", "qarma_bic", "lm", "sarma",
-                       "np")) ||
-      length(var_est) != 1)
+  if (!(var_model %in% dcs_list_var_model) ||
+      length(var_model) != 1)
   {
-    stop("Unknown values in argument \"var_est\".")
+    stop("Unknown values in argument \"var_model\".")
   }
   
   # IPI_options
@@ -127,10 +154,10 @@ exception.check.options.input = function(type, kerns, drv, var_est, IPI_options)
   {
     stop("Unknown values in argument \"IPI_options$infl_par\".")
   }
-  if (exists("delta", IPI_options) && (!is.numeric(IPI_options$delta) ||
-      length(IPI_options$delta) != 2))
+  if (exists("trim", IPI_options) && (!is.numeric(IPI_options$trim) ||
+      length(IPI_options$trim) != 2))
   {
-    stop("Unknown values in argument \"IPI_options$delta\".")
+    stop("Unknown values in argument \"IPI_options$trim\".")
   }
   if (exists("const_window", IPI_options) && 
       (!is.logical(IPI_options$const_window) ||
@@ -146,13 +173,13 @@ exception.check.options.input = function(type, kerns, drv, var_est, IPI_options)
 exception.check.options = function(dcs_opt)
 {
   sys.call(-1)
-  # check class
+# check class
   if(!(class(dcs_opt) == "dcs_options"))
   {
     stop("Incorrect options specified, please use \"set.options()\".")
   }
   
-  # check for unknown or missing options
+# check for unknown or missing options
   unknown_name = names(dcs_opt)[which(!(names(dcs_opt) %in% dcs_list_options))]
   if (length(unknown_name) > 0)
   {
@@ -165,20 +192,20 @@ exception.check.options = function(dcs_opt)
     stop("Option \"", unspec_name, "\" not specified.")
   }
   
-  # check kernels
+# check kernels
   if (!(dcs_opt$kerns[1] %in% dcs_list_kernels) || 
       !(dcs_opt$kerns[2] %in% dcs_list_kernels))
   {
     stop("Unsupported kernels specified.")
   }
   
-  # check regression type
+# check regression type
   if (!(dcs_opt$type %in% c("LP", "KR")))
   {
     stop("Unsupported regression type. Choose \"KR\" or \"LP\"")
   }
   
-  # check derivative orders
+# check derivative orders
   if (!is.numeric(dcs_opt$drv))
   {
     stop("Derivative order must be numeric.")
@@ -188,77 +215,93 @@ exception.check.options = function(dcs_opt)
     stop("Derivative order must be at least 0.")
   }
   
-  # check delta orders
-  if (!is.numeric(dcs_opt$IPI_options$delta))
+# check trim orders
+  if (!is.numeric(dcs_opt$IPI_options$trim))
   {
-    stop("Shrink factor \"delta\" must be numeric.")
+    stop("Shrink factor \"trim\" must be numeric.")
   }
-  if (length(dcs_opt$IPI_options$delta) != 2)
+  if (length(dcs_opt$IPI_options$trim) != 2)
   {
-    stop("Shrink factor \"delta\" must be a numeric vector of length 2.")
+    stop("Shrink factor \"trim\" must be a numeric vector of length 2.")
   }
-  if (any(dcs_opt$IPI_options$delta < 0) ||
-      any(dcs_opt$IPI_options$delta > 0.5))
+  if (any(dcs_opt$IPI_options$trim < 0) ||
+      any(dcs_opt$IPI_options$trim > 0.5))
   {
-    stop("Shrink factor \"delta\" must be between 0 and 0.5.")
-  }
-  
-  ### Options for Local Polynomial Regression
-  if (dcs_opt$type == "LP")
-  {
-    # check inflation exponents
-    if (any(dcs_opt$IPI_options$infl_exp[1] != "auto"))
-    {
-      warning("Inflation exponents have been changed.")
-    }
-  
-    # check inflation parameters
-    if (any(dcs_opt$IPI_options$infl_par != c(1, 1)))
-    {
-      warning("Inflation parameters have been changed.")
-    } 
+    stop("Shrink factor \"trim\" must be between 0 and 0.5.")
   }
   
-  ### Options for Kernel Regression
-  if (dcs_opt$type == "KR")
+# Options for derivative estimation
+  if (!is.numeric(dcs_opt$drv))
   {
-    # check derivative orders
-    if (!is.numeric(dcs_opt$drv))
-    {
-      stop("Derivative order must be numeric.")
-    }
-    if (any(dcs_opt$drv != 0))
-    {  
-      stop("Estimation of derivatives currently not supported for kernel ",
-           "regression")
-    }
-    
-    # check inflation exponents
-    if (any(dcs_opt$IPI_options$infl_exp != 0.5))
-    {
-      warning("Inflation exponents have been changed.")
-    }
-    
-    # check inflation parameters
-    if (any(dcs_opt$IPI_options$infl_par != c(2, 1)))
-    {
-      warning("Inflation parameters have been changed.")
-    } 
+    stop("Derivative order must be numeric.")
+  }
+  if (any(dcs_opt$drv != as.numeric(substr(dcs_opt$kerns,
+                            nchar(dcs_opt$kerns), nchar(dcs_opt$kerns)))))
+  {
+    stop("Kernel orders not matching derivative orders.")
+  }
+  if (any(dcs_opt$drv > 2))
+  {
+    stop("Estimation of derivatives > 2 currently not supported.")
+  }
+  if (dcs_opt$type == "KR" && any(dcs_opt$drv > 0) &&
+      any(dcs_opt$drv[which(substr(dcs_opt$kerns, 1, 1) == "T")] > 0))
+  {
+    stop("Estimation of derivatives > 0 currently not supported for ",
+         "truncated kernels.")
+  }
+
+### Options for variance estimation method
+  if (!(dcs_opt$var_model %in% dcs_list_var_model))
+  {
+    stop("unsupported method in \"var_model\".")
+  }
+  if (dcs_opt$var_model == "np")
+  {
+    warning("Nonparametric estimation of variance factor c_f currently in ",
+            "experimental state (probably slow).")
   }
   
-  ### Options for variance estimation method
-  if (!(dcs_opt$var_est %in% c("iid", "qarma", "qarma_gpac", "qarma_bic",
-                               "lm", "sarma", "np")))
+  ### Model selection options
+  if (exists("model_order", dcs_opt$add_options))
   {
-    stop("unsupported method in var_est.")
+    exception.check.model_order(dcs_opt$add_options$model_order,
+                                dcs_opt$var_model)
+  }
+  if (exists("order_max", dcs_opt$add_options))
+  {
+    exception.check.order_max(dcs_opt$add_options$order_max)
   }
 }
 
 #---------------------------Check additional Options---------------------------#
 
-exception.check.model_order = function(model_order, dcs_options)
+exception.check.model_order = function(model_order, var_model)
 {
-  if (!(exists("ar", model_order) && exists("ma", model_order)))
+  if (var_model[1] == "iid")
+  {
+    message("argument \"model_order\" is unused for iid. errors.")
+  }
+  
+  if (!is.list(model_order) && (length(model_order) == 1 &&
+      model_order %in% c("aic", "bic", "gpac")))
+  {
+    # No GPAC estimation for SFARIMA possible
+    if (model_order == "gpac" && var_model == "sfarima_RSS")
+    {
+      stop("Order selection of type \"gpac\" not supported for SFARIMA models.")
+    } else {
+      return(NULL)
+    }
+  }
+  
+  if (!is.list(model_order) && (length(model_order) != 1 ||
+      !(model_order %in% c("aic", "bic", "gpac"))))
+  {
+    stop("unknown model selection criterion specified in \"model_order\".")
+  }
+  if (is.list(model_order) && !(exists("ar", model_order) &&
+                                exists("ma", model_order)))
   {
     stop("\"model_order\" incorrectly specified.")
   }
@@ -271,5 +314,52 @@ exception.check.model_order = function(model_order, dcs_options)
       any(model_order$ma < 0))
   {
     stop("MA order of \"model_order\" incorrectly specified")
+  }
+}
+
+exception.check.order_max = function(order_max)
+{
+  if (!(exists("ar", order_max) && exists("ma", order_max)))
+  {
+    stop("\"order_max\" incorrectly specified.")
+  }
+  if (!is.numeric(order_max$ar) || length(order_max$ar) != 2 ||
+      any(order_max$ar < 0))
+  {
+    stop("AR order of \"order_max\" incorrectly specified")
+  }
+  if (!is.numeric(order_max$ma) || length(order_max$ma) != 2 ||
+      any(order_max$ma < 0))
+  {
+    stop("MA order of \"model_order\" incorrectly specified")
+  }
+}
+
+#------------------------Exceptions for SARMA/SFARIMA--------------------------#
+
+exception.check.model.sarma = function(model)
+{
+  if (any(is.na(unlist(model))))
+  {
+    stop("Missing values in subelements of list \"model\".")
+  }
+  
+  if (!is.numeric(unlist(model)))
+  {
+    stop("Only numerical values in subelements of list \"model\" allowed.")
+  }
+
+  if (as.matrix(model$ar)[1, 1] != 1)
+  {
+    warning("Entry in upper left of matrix \"$ar\" is not equal to 1.")
+  }
+  if (as.matrix(model$ma)[1, 1] != 1)
+  {
+    warning("Entry in upper left of matrix \"$ma\" is not equal to 1.")
+  }
+  
+  if (length(model$sigma) != 1)
+  {
+    stop("Argument \"sigma\" should be a scalar value.")
   }
 }

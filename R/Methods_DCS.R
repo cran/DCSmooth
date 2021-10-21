@@ -1,3 +1,22 @@
+################################################################################
+#                                                                              #
+#                      DCSmooth Package: Methods for DCS                       #
+#                                                                              #
+################################################################################
+
+### Includes all methods for summarizing, printing and plotting classes "dcs" and
+### "dcs_options".
+
+  # summary.dcs
+    # print.summary_dcs
+  # print.dcs
+  # summary.dcs_options
+  # print.dcs_options
+  # residuals.dcs
+  # plot.dcs
+  # .order.to.string
+  # .onUnload
+
 #------------------------------Summary Methods---------------------------------#
 
 #' Summarizing Results from Double Conditional Smoothing
@@ -22,7 +41,7 @@
 #'  and the time used for bandwidth selection.
 #' 
 #'  The method used for estimation of the variance coefficient is printed and 
-#'  the results of an QARMA-estimation, if available.
+#'  the results of an SARMA/SFARIMA-estimation, if available.
 #' 
 #'  If bandwidths are supplied to \code{dcs}, \code{summary.dcs} only prints
 #'  the given bandwidths.
@@ -34,8 +53,11 @@
 #'  \code{iterations} \tab number of iterations of the IPI-procedure. \cr
 #'  \code{time_used} \tab time spend searching for optimal bandwidths (not 
 #'   overall runtime of the function). \cr
-#'  \code{qarma} \tab optional return, if method \code{"qarma"} is chosen for 
-#'   estimation of the variance factor. Omitted, if \code{"iid"} is used. \cr
+#'  \code{var_est} \tab estimated variance model. Has class "sarma" if an
+#'   SARMA model is used and class "sfarima" if an SFARIMA model is used.\cr
+#'  \code{var_model_id} \tab identifier for the variance model estimated. \cr
+#'  \code{var_model_order} \tab order of the estimated variance model, if either
+#'   SARMA or SFARIMA is used. \cr
 #'  \code{dcs_options} \tab an object of class \code{cds_options} containing the
 #'   initial options of the dcs procedure. \cr
 #' }
@@ -50,17 +72,26 @@
 
 summary.dcs = function(object, ...)
 {
-  if (exists("qarma", object)) {
-    summary_dcs = list(h = object$h, c_f = object$c_f,
-                       iterations = object$iterations, 
-                       time_used = object$time_used, qarma = object$qarma,
-                       dcs_options = object$dcs_options)
+  var_temp = object$var_est$model
+  if (object$dcs_options$var_model == "iid")
+  {
+    var_model_id = "iid"
+    var_model_order = NA
+  } else if (object$dcs_options$var_model == "sfarima_RSS") {
+    var_model_id = "sfarima"
+    var_model_order = list(ar = dim(var_temp$ar), ma = dim(var_temp$ma))
   } else {
-    summary_dcs = list(h = object$h, c_f = object$c_f,
+    var_model_id = "sarma"
+    var_model_order = list(ar = dim(var_temp$ar), ma = dim(var_temp$ma))
+  }
+  
+  summary_dcs = list(h = object$h, c_f = object$c_f,
                        iterations = object$iterations, 
                        time_used = object$time_used,
+                       var_est = object$var_est,
+                       var_model_id = var_model_id,
+                       var_model_order = var_model_order,
                        dcs_options = object$dcs_options)
-  }
   
   attr(summary_dcs, "h_select_auto") = attr(object, "h_select_auto")
                      
@@ -115,20 +146,18 @@ print.summary_dcs = function(x, ...)
     cat("Time used (seconds):\t \t", signif(x$time_used, 
                                            digits = digits), "\n")
     cat("------------------------------------------", "\n")
-    if (x$dcs_options$var_est == "iid")
-    {
-      cat("Variance Estimation: \t iid.\n")
-    } else if (x$dcs_options$var_est == "qarma") {
-      cat("Variance Estimation: \t qarma\n")
-      cat("Estimated Parameters:\n")
-      cat("ar:\n")
-      print(signif(x$qarma$ar, digits = 5))
-      cat("ma:\n")
-      print(signif(x$qarma$ma, digits = 5))
+    cat("Variance Model:\t", x$var_model_id, "\n")
+    if (x$var_model_id == "iid") {
+      cat("------------------------------------------", "\n")
+      cat("sigma:\t", x$var_est$model$sigma, "\n")
+      cat("stationary:\tTRUE\n")
+    } else if (x$var_model_id == "sarma") {
+      print.summary_sarma(summary.sarma(x$var_est))
+    } else if (x$var_model_id == "sfarima") {
+      print.summary_sfarima(summary.sfarima(x$var_est))
     }
     cat("------------------------------------------", "\n")
     cat("See used parameter with \"$dcs_options\".\n")
-    cat("------------------------------------------", "\n")
     
   # when given bandwidths are used.
   } else if (attr(x, "h_select_auto") == FALSE) {
@@ -140,7 +169,6 @@ print.summary_dcs = function(x, ...)
     cat("\t \t \t h_t:\t", x$h[2], "\n")
     cat("------------------------------------------", "\n")
     cat("See used parameter with \"$dcs_options\".\n")
-    cat("------------------------------------------", "\n")
   }
 }
   
@@ -176,26 +204,25 @@ print.dcs = function(x, ...)
   if (attr(x, "h_select_auto") == TRUE)
   {
     cat(class(x), "\n")
-    cat("--------------------------------------", "\n")
-    cat("DCS with automatic bandwidth selection\n")
-    cat("--------------------------------------", "\n")
+    cat("------------------------------------------", "\n")
+    cat("DCS with automatic bandwidth selection:\n")
+    cat("------------------------------------------", "\n")
     cat(" Selected Bandwidths:\n")
     cat("\t\th_x:", signif(x$h[1], digits = 5), "\n")
     cat("\t\th_t:", signif(x$h[2], digits = 5), "\n")
     cat(" Variance Factor:\n")
     cat("\t\tc_f:", signif(x$c_f, digits = 5), "\n")
-    cat("--------------------------------------", "\n")
-    
+    cat("------------------------------------------", "\n")
   # when given bandwidths are used.
   } else if (attr(x, "h_select_auto") == FALSE) {
     cat(class(x), "\n")
-    cat("---------------------------", "\n")
-    cat("DCS with given bandwidths\n")
-    cat("---------------------------", "\n")
+    cat("------------------------------", "\n")
+    cat("DCS with given bandwidths:\n")
+    cat("------------------------------", "\n")
     cat("Used Bandwidths:\n")
     cat("\th_x:", x$h[1], "\n")
     cat("\th_t:", x$h[2], "\n")
-    cat("---------------------------")
+    cat("------------------------------")
   }
 }
 
@@ -256,7 +283,7 @@ summary.dcs_options = function(object, ...)
     cat("derivative: \t \t", object$drv[1], "\t", object$drv[2], "\n", sep = "")
     cat("polynomial order: \t", object$p_order[1], "\t", object$p_order[2], 
         "\n", sep = "")
-    cat("variance model: \t", object$var_est, "\n", sep = "")
+    cat("variance model: \t", object$var_model, "\n", sep = "")
     cat("---------------------------------------", "\n")
   }
   
@@ -267,7 +294,7 @@ summary.dcs_options = function(object, ...)
       sep = "")
   cat("inflation exponents \t", ipi$infl_exp[1], "\t", ipi$infl_exp[2], "\n",
       sep = "")
-  cat("delta \t \t \t", ipi$delta[1], "\t", ipi$delta[2], "\n", sep = "")
+  cat("trim \t \t \t", ipi$trim[1], "\t", ipi$trim[2], "\n", sep = "")
   cat("constant window width \t", ipi$const_window, "\n", sep = "")
   cat("---------------------------------------", "\n")
 }
@@ -318,7 +345,7 @@ print.dcs_options = function(x, ...)
     cat("kernels used: \t \t", x$kerns[1], "\t", x$kerns[2], 
         "\n", sep = "")
     cat("derivative: \t \t", x$drv[1], "\t", x$drv[2], "\n", sep = "")
-    cat("variance model: \t", x$var_est, "\n", sep = "")
+    cat("variance model: \t", x$var_model, "\n", sep = "")
     cat("---------------------------------------", "\n", sep = "")
   } else if (x$type == "LP") {  
     # when Local Polynomial Regression is selected
@@ -328,7 +355,7 @@ print.dcs_options = function(x, ...)
     cat("derivative: \t \t", x$drv[1], "\t", x$drv[2], "\n", sep = "")
     cat("polynomial order: \t", x$p_order[1], "\t", x$p_order[2], 
         "\n", sep = "")
-    cat("variance model: \t", x$var_est, "\n", sep = "")
+    cat("variance model: \t", x$var_mode, "\n", sep = "")
     cat("---------------------------------------", "\n")
   }
 }
@@ -436,5 +463,14 @@ plot.dcs = function(x, ...)
   graphics::plot(vec_XT[, 1], vec_XT[, 2], pch = 15, col = col_vec,
        xlab = "T", ylab = "X", main = main_title)
 }
+
+#-----------------------Additional Functions for Methods-----------------------#
+
+.order.to.string = function(model_order)
+{
+  paste0("((", model_order$ar[1], ",", model_order$ar[2], "),(", 
+         model_order$ma[1], ",", model_order$ma[2], "))")
+}
+
 
 .onUnload <- function(libpath) { library.dynam.unload("DCSmooth", libpath) }

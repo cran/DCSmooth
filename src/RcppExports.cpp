@@ -105,115 +105,8 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// weight_fcn_assign
-XPtr<weightPtr> weight_fcn_assign(std::string fstr);
-RcppExport SEXP _DCSmooth_weight_fcn_assign(SEXP fstrSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type fstr(fstrSEXP);
-    rcpp_result_gen = Rcpp::wrap(weight_fcn_assign(fstr));
-    return rcpp_result_gen;
-END_RCPP
-}
-// kernFkt_MW210
-arma::vec kernFkt_MW210(arma::vec& u, double q);
-RcppExport SEXP _DCSmooth_kernFkt_MW210(SEXP uSEXP, SEXP qSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec& >::type u(uSEXP);
-    Rcpp::traits::input_parameter< double >::type q(qSEXP);
-    rcpp_result_gen = Rcpp::wrap(kernFkt_MW210(u, q));
-    return rcpp_result_gen;
-END_RCPP
-}
-// kernFkt_MW220
-arma::vec kernFkt_MW220(arma::vec& uVec, double q);
-RcppExport SEXP _DCSmooth_kernFkt_MW220(SEXP uVecSEXP, SEXP qSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
-    Rcpp::traits::input_parameter< double >::type q(qSEXP);
-    rcpp_result_gen = Rcpp::wrap(kernFkt_MW220(uVec, q));
-    return rcpp_result_gen;
-END_RCPP
-}
-// kernFkt_MW320
-arma::vec kernFkt_MW320(arma::vec& u, double q);
-RcppExport SEXP _DCSmooth_kernFkt_MW320(SEXP uSEXP, SEXP qSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec& >::type u(uSEXP);
-    Rcpp::traits::input_parameter< double >::type q(qSEXP);
-    rcpp_result_gen = Rcpp::wrap(kernFkt_MW320(u, q));
-    return rcpp_result_gen;
-END_RCPP
-}
-// kernFkt_MW420
-arma::vec kernFkt_MW420(arma::vec& uVec, double q);
-RcppExport SEXP _DCSmooth_kernFkt_MW420(SEXP uVecSEXP, SEXP qSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
-    Rcpp::traits::input_parameter< double >::type q(qSEXP);
-    rcpp_result_gen = Rcpp::wrap(kernFkt_MW420(uVec, q));
-    return rcpp_result_gen;
-END_RCPP
-}
-// kernFkt_MW421
-arma::vec kernFkt_MW421(arma::vec& uVec, double q);
-RcppExport SEXP _DCSmooth_kernFkt_MW421(SEXP uVecSEXP, SEXP qSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
-    Rcpp::traits::input_parameter< double >::type q(qSEXP);
-    rcpp_result_gen = Rcpp::wrap(kernFkt_MW421(uVec, q));
-    return rcpp_result_gen;
-END_RCPP
-}
-// kernFkt_MW422
-arma::vec kernFkt_MW422(arma::vec& uVec, double q);
-RcppExport SEXP _DCSmooth_kernFkt_MW422(SEXP uVecSEXP, SEXP qSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
-    Rcpp::traits::input_parameter< double >::type q(qSEXP);
-    rcpp_result_gen = Rcpp::wrap(kernFkt_MW422(uVec, q));
-    return rcpp_result_gen;
-END_RCPP
-}
-// kernFkt_TR420
-arma::vec kernFkt_TR420(arma::vec& uVec, double q);
-RcppExport SEXP _DCSmooth_kernFkt_TR420(SEXP uVecSEXP, SEXP qSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
-    Rcpp::traits::input_parameter< double >::type q(qSEXP);
-    rcpp_result_gen = Rcpp::wrap(kernFkt_TR420(uVec, q));
-    return rcpp_result_gen;
-END_RCPP
-}
-// kernFkt_TR422
-arma::vec kernFkt_TR422(arma::vec& uVec, double q);
-RcppExport SEXP _DCSmooth_kernFkt_TR422(SEXP uVecSEXP, SEXP qSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
-    Rcpp::traits::input_parameter< double >::type q(qSEXP);
-    rcpp_result_gen = Rcpp::wrap(kernFkt_TR422(uVec, q));
-    return rcpp_result_gen;
-END_RCPP
-}
 // kernel_fcn_assign
-XPtr<funcPtr> kernel_fcn_assign(std::string fstr);
+Rcpp::XPtr<funcPtr> kernel_fcn_assign(std::string fstr);
 RcppExport SEXP _DCSmooth_kernel_fcn_assign(SEXP fstrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -236,34 +129,290 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// LPSmooth_matrix2
-arma::mat LPSmooth_matrix2(const arma::mat yMat, const double h, const int polyOrder, const int drv, SEXP kernFcnPtr);
-RcppExport SEXP _DCSmooth_LPSmooth_matrix2(SEXP yMatSEXP, SEXP hSEXP, SEXP polyOrderSEXP, SEXP drvSEXP, SEXP kernFcnPtrSEXP) {
+// weight_fcn_assign
+Rcpp::XPtr<weightPtr> weight_fcn_assign(std::string fstr);
+RcppExport SEXP _DCSmooth_weight_fcn_assign(SEXP fstrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat >::type yMat(yMatSEXP);
-    Rcpp::traits::input_parameter< const double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< const int >::type polyOrder(polyOrderSEXP);
-    Rcpp::traits::input_parameter< const int >::type drv(drvSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type kernFcnPtr(kernFcnPtrSEXP);
-    rcpp_result_gen = Rcpp::wrap(LPSmooth_matrix2(yMat, h, polyOrder, drv, kernFcnPtr));
+    Rcpp::traits::input_parameter< std::string >::type fstr(fstrSEXP);
+    rcpp_result_gen = Rcpp::wrap(weight_fcn_assign(fstr));
     return rcpp_result_gen;
 END_RCPP
 }
-// LP_dcs_const0
-arma::mat LP_dcs_const0(arma::mat yMat, arma::colvec hVec, arma::icolvec polyOrderVec, arma::icolvec drvVec, SEXP kernFcnPtr_x, SEXP kernFcnPtr_t);
-RcppExport SEXP _DCSmooth_LP_dcs_const0(SEXP yMatSEXP, SEXP hVecSEXP, SEXP polyOrderVecSEXP, SEXP drvVecSEXP, SEXP kernFcnPtr_xSEXP, SEXP kernFcnPtr_tSEXP) {
+// kern_fcn_M200
+arma::vec kern_fcn_M200(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_M200(SEXP uVecSEXP, SEXP qSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type yMat(yMatSEXP);
-    Rcpp::traits::input_parameter< arma::colvec >::type hVec(hVecSEXP);
-    Rcpp::traits::input_parameter< arma::icolvec >::type polyOrderVec(polyOrderVecSEXP);
-    Rcpp::traits::input_parameter< arma::icolvec >::type drvVec(drvVecSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type kernFcnPtr_x(kernFcnPtr_xSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type kernFcnPtr_t(kernFcnPtr_tSEXP);
-    rcpp_result_gen = Rcpp::wrap(LP_dcs_const0(yMat, hVec, polyOrderVec, drvVec, kernFcnPtr_x, kernFcnPtr_t));
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_M200(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_M210
+arma::vec kern_fcn_M210(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_M210(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_M210(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_M220
+arma::vec kern_fcn_M220(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_M220(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_M220(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_M321
+arma::vec kern_fcn_M321(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_M321(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_M321(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_M420
+arma::vec kern_fcn_M420(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_M420(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_M420(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_M421
+arma::vec kern_fcn_M421(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_M421(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_M421(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_M422
+arma::vec kern_fcn_M422(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_M422(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_M422(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_M533
+arma::vec kern_fcn_M533(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_M533(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_M533(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_M644
+arma::vec kern_fcn_M644(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_M644(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_M644(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_MW200
+arma::vec kern_fcn_MW200(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_MW200(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_MW200(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_MW210
+arma::vec kern_fcn_MW210(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_MW210(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_MW210(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_MW220
+arma::vec kern_fcn_MW220(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_MW220(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_MW220(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_MW320
+arma::vec kern_fcn_MW320(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_MW320(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_MW320(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_MW321
+arma::vec kern_fcn_MW321(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_MW321(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_MW321(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_MW420
+arma::vec kern_fcn_MW420(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_MW420(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_MW420(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_MW421
+arma::vec kern_fcn_MW421(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_MW421(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_MW421(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_MW422
+arma::vec kern_fcn_MW422(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_MW422(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_MW422(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_MW533
+arma::vec kern_fcn_MW533(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_MW533(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_MW533(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_MW644
+arma::vec kern_fcn_MW644(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_MW644(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_MW644(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_T220
+arma::vec kern_fcn_T220(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_T220(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_T220(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_T321
+arma::vec kern_fcn_T321(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_T321(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_T321(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_T420
+arma::vec kern_fcn_T420(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_T420(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_T420(uVec, q));
+    return rcpp_result_gen;
+END_RCPP
+}
+// kern_fcn_T422
+arma::vec kern_fcn_T422(arma::vec& uVec, double q);
+RcppExport SEXP _DCSmooth_kern_fcn_T422(SEXP uVecSEXP, SEXP qSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< arma::vec& >::type uVec(uVecSEXP);
+    Rcpp::traits::input_parameter< double >::type q(qSEXP);
+    rcpp_result_gen = Rcpp::wrap(kern_fcn_T422(uVec, q));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -300,37 +449,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// LPSmooth_matrix
-arma::mat LPSmooth_matrix(const arma::mat yMat, const double h, const int polyOrder, const int drv, SEXP kernFcnPtr);
-RcppExport SEXP _DCSmooth_LPSmooth_matrix(SEXP yMatSEXP, SEXP hSEXP, SEXP polyOrderSEXP, SEXP drvSEXP, SEXP kernFcnPtrSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat >::type yMat(yMatSEXP);
-    Rcpp::traits::input_parameter< const double >::type h(hSEXP);
-    Rcpp::traits::input_parameter< const int >::type polyOrder(polyOrderSEXP);
-    Rcpp::traits::input_parameter< const int >::type drv(drvSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type kernFcnPtr(kernFcnPtrSEXP);
-    rcpp_result_gen = Rcpp::wrap(LPSmooth_matrix(yMat, h, polyOrder, drv, kernFcnPtr));
-    return rcpp_result_gen;
-END_RCPP
-}
-// LP_dcs_const1
-arma::mat LP_dcs_const1(arma::mat yMat, arma::colvec hVec, arma::icolvec polyOrderVec, arma::icolvec drvVec, SEXP kernFcnPtr_x, SEXP kernFcnPtr_t);
-RcppExport SEXP _DCSmooth_LP_dcs_const1(SEXP yMatSEXP, SEXP hVecSEXP, SEXP polyOrderVecSEXP, SEXP drvVecSEXP, SEXP kernFcnPtr_xSEXP, SEXP kernFcnPtr_tSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::mat >::type yMat(yMatSEXP);
-    Rcpp::traits::input_parameter< arma::colvec >::type hVec(hVecSEXP);
-    Rcpp::traits::input_parameter< arma::icolvec >::type polyOrderVec(polyOrderVecSEXP);
-    Rcpp::traits::input_parameter< arma::icolvec >::type drvVec(drvVecSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type kernFcnPtr_x(kernFcnPtr_xSEXP);
-    Rcpp::traits::input_parameter< SEXP >::type kernFcnPtr_t(kernFcnPtr_tSEXP);
-    rcpp_result_gen = Rcpp::wrap(LP_dcs_const1(yMat, hVec, polyOrderVec, drvVec, kernFcnPtr_x, kernFcnPtr_t));
-    return rcpp_result_gen;
-END_RCPP
-}
 // LPSmooth_matrix_BMod
 arma::mat LPSmooth_matrix_BMod(const arma::mat yMat, const double h, const int polyOrder, const int drv, const int mu, SEXP weightFcnPtr);
 RcppExport SEXP _DCSmooth_LPSmooth_matrix_BMod(SEXP yMatSEXP, SEXP hSEXP, SEXP polyOrderSEXP, SEXP drvSEXP, SEXP muSEXP, SEXP weightFcnPtrSEXP) {
@@ -364,6 +482,59 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ar_coef
+arma::vec ar_coef(const arma::vec ar, const arma::vec ma, const double d, const int k);
+RcppExport SEXP _DCSmooth_ar_coef(SEXP arSEXP, SEXP maSEXP, SEXP dSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec >::type ar(arSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type ma(maSEXP);
+    Rcpp::traits::input_parameter< const double >::type d(dSEXP);
+    Rcpp::traits::input_parameter< const int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(ar_coef(ar, ma, d, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ARMA_to_AR
+NumericVector ARMA_to_AR(const arma::vec phi, const arma::vec psi, const int K);
+RcppExport SEXP _DCSmooth_ARMA_to_AR(SEXP phiSEXP, SEXP psiSEXP, SEXP KSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec >::type phi(phiSEXP);
+    Rcpp::traits::input_parameter< const arma::vec >::type psi(psiSEXP);
+    Rcpp::traits::input_parameter< const int >::type K(KSEXP);
+    rcpp_result_gen = Rcpp::wrap(ARMA_to_AR(phi, psi, K));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sarma_rss
+double sarma_rss(const arma::vec theta, const arma::mat R_mat, const List model_order);
+RcppExport SEXP _DCSmooth_sarma_rss(SEXP thetaSEXP, SEXP R_matSEXP, SEXP model_orderSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type R_mat(R_matSEXP);
+    Rcpp::traits::input_parameter< const List >::type model_order(model_orderSEXP);
+    rcpp_result_gen = Rcpp::wrap(sarma_rss(theta, R_mat, model_order));
+    return rcpp_result_gen;
+END_RCPP
+}
+// sfarima_rss
+double sfarima_rss(const arma::vec theta, const arma::mat R_mat, const List model_order);
+RcppExport SEXP _DCSmooth_sfarima_rss(SEXP thetaSEXP, SEXP R_matSEXP, SEXP model_orderSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const arma::vec >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< const arma::mat >::type R_mat(R_matSEXP);
+    Rcpp::traits::input_parameter< const List >::type model_order(model_orderSEXP);
+    rcpp_result_gen = Rcpp::wrap(sfarima_rss(theta, R_mat, model_order));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_DCSmooth_xMatrix", (DL_FUNC) &_DCSmooth_xMatrix, 2},
@@ -373,25 +544,40 @@ static const R_CallMethodDef CallEntries[] = {
     {"_DCSmooth_KR_dcs_const0", (DL_FUNC) &_DCSmooth_KR_dcs_const0, 5},
     {"_DCSmooth_KRSmooth_matrix", (DL_FUNC) &_DCSmooth_KRSmooth_matrix, 4},
     {"_DCSmooth_KR_dcs_const1", (DL_FUNC) &_DCSmooth_KR_dcs_const1, 5},
-    {"_DCSmooth_weight_fcn_assign", (DL_FUNC) &_DCSmooth_weight_fcn_assign, 1},
-    {"_DCSmooth_kernFkt_MW210", (DL_FUNC) &_DCSmooth_kernFkt_MW210, 2},
-    {"_DCSmooth_kernFkt_MW220", (DL_FUNC) &_DCSmooth_kernFkt_MW220, 2},
-    {"_DCSmooth_kernFkt_MW320", (DL_FUNC) &_DCSmooth_kernFkt_MW320, 2},
-    {"_DCSmooth_kernFkt_MW420", (DL_FUNC) &_DCSmooth_kernFkt_MW420, 2},
-    {"_DCSmooth_kernFkt_MW421", (DL_FUNC) &_DCSmooth_kernFkt_MW421, 2},
-    {"_DCSmooth_kernFkt_MW422", (DL_FUNC) &_DCSmooth_kernFkt_MW422, 2},
-    {"_DCSmooth_kernFkt_TR420", (DL_FUNC) &_DCSmooth_kernFkt_TR420, 2},
-    {"_DCSmooth_kernFkt_TR422", (DL_FUNC) &_DCSmooth_kernFkt_TR422, 2},
     {"_DCSmooth_kernel_fcn_assign", (DL_FUNC) &_DCSmooth_kernel_fcn_assign, 1},
     {"_DCSmooth_kernel_fcn_use", (DL_FUNC) &_DCSmooth_kernel_fcn_use, 3},
-    {"_DCSmooth_LPSmooth_matrix2", (DL_FUNC) &_DCSmooth_LPSmooth_matrix2, 5},
-    {"_DCSmooth_LP_dcs_const0", (DL_FUNC) &_DCSmooth_LP_dcs_const0, 6},
+    {"_DCSmooth_weight_fcn_assign", (DL_FUNC) &_DCSmooth_weight_fcn_assign, 1},
+    {"_DCSmooth_kern_fcn_M200", (DL_FUNC) &_DCSmooth_kern_fcn_M200, 2},
+    {"_DCSmooth_kern_fcn_M210", (DL_FUNC) &_DCSmooth_kern_fcn_M210, 2},
+    {"_DCSmooth_kern_fcn_M220", (DL_FUNC) &_DCSmooth_kern_fcn_M220, 2},
+    {"_DCSmooth_kern_fcn_M321", (DL_FUNC) &_DCSmooth_kern_fcn_M321, 2},
+    {"_DCSmooth_kern_fcn_M420", (DL_FUNC) &_DCSmooth_kern_fcn_M420, 2},
+    {"_DCSmooth_kern_fcn_M421", (DL_FUNC) &_DCSmooth_kern_fcn_M421, 2},
+    {"_DCSmooth_kern_fcn_M422", (DL_FUNC) &_DCSmooth_kern_fcn_M422, 2},
+    {"_DCSmooth_kern_fcn_M533", (DL_FUNC) &_DCSmooth_kern_fcn_M533, 2},
+    {"_DCSmooth_kern_fcn_M644", (DL_FUNC) &_DCSmooth_kern_fcn_M644, 2},
+    {"_DCSmooth_kern_fcn_MW200", (DL_FUNC) &_DCSmooth_kern_fcn_MW200, 2},
+    {"_DCSmooth_kern_fcn_MW210", (DL_FUNC) &_DCSmooth_kern_fcn_MW210, 2},
+    {"_DCSmooth_kern_fcn_MW220", (DL_FUNC) &_DCSmooth_kern_fcn_MW220, 2},
+    {"_DCSmooth_kern_fcn_MW320", (DL_FUNC) &_DCSmooth_kern_fcn_MW320, 2},
+    {"_DCSmooth_kern_fcn_MW321", (DL_FUNC) &_DCSmooth_kern_fcn_MW321, 2},
+    {"_DCSmooth_kern_fcn_MW420", (DL_FUNC) &_DCSmooth_kern_fcn_MW420, 2},
+    {"_DCSmooth_kern_fcn_MW421", (DL_FUNC) &_DCSmooth_kern_fcn_MW421, 2},
+    {"_DCSmooth_kern_fcn_MW422", (DL_FUNC) &_DCSmooth_kern_fcn_MW422, 2},
+    {"_DCSmooth_kern_fcn_MW533", (DL_FUNC) &_DCSmooth_kern_fcn_MW533, 2},
+    {"_DCSmooth_kern_fcn_MW644", (DL_FUNC) &_DCSmooth_kern_fcn_MW644, 2},
+    {"_DCSmooth_kern_fcn_T220", (DL_FUNC) &_DCSmooth_kern_fcn_T220, 2},
+    {"_DCSmooth_kern_fcn_T321", (DL_FUNC) &_DCSmooth_kern_fcn_T321, 2},
+    {"_DCSmooth_kern_fcn_T420", (DL_FUNC) &_DCSmooth_kern_fcn_T420, 2},
+    {"_DCSmooth_kern_fcn_T422", (DL_FUNC) &_DCSmooth_kern_fcn_T422, 2},
     {"_DCSmooth_LPSmooth_matrix2_BMod", (DL_FUNC) &_DCSmooth_LPSmooth_matrix2_BMod, 6},
     {"_DCSmooth_LP_dcs_const0_BMod", (DL_FUNC) &_DCSmooth_LP_dcs_const0_BMod, 7},
-    {"_DCSmooth_LPSmooth_matrix", (DL_FUNC) &_DCSmooth_LPSmooth_matrix, 5},
-    {"_DCSmooth_LP_dcs_const1", (DL_FUNC) &_DCSmooth_LP_dcs_const1, 6},
     {"_DCSmooth_LPSmooth_matrix_BMod", (DL_FUNC) &_DCSmooth_LPSmooth_matrix_BMod, 6},
     {"_DCSmooth_LP_dcs_const1_BMod", (DL_FUNC) &_DCSmooth_LP_dcs_const1_BMod, 7},
+    {"_DCSmooth_ar_coef", (DL_FUNC) &_DCSmooth_ar_coef, 4},
+    {"_DCSmooth_ARMA_to_AR", (DL_FUNC) &_DCSmooth_ARMA_to_AR, 3},
+    {"_DCSmooth_sarma_rss", (DL_FUNC) &_DCSmooth_sarma_rss, 3},
+    {"_DCSmooth_sfarima_rss", (DL_FUNC) &_DCSmooth_sfarima_rss, 3},
     {NULL, NULL, 0}
 };
 

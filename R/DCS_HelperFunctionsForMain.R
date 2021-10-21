@@ -1,14 +1,20 @@
 ################################################################################
 #                                                                              #
-#                DCSmooth Package: General Auxiliary Funcions                  #
+#                DCSmooth Package: Additional Utility Functions                #
 #                                                                              #
 ################################################################################
+
+# Functions which are used as additional or auxiliary functions and do not
+# belong to another category
+
+# .plotly.3d
+# plot.dcs.colors
 
 #----------------------Function for 3d plots using plotly----------------------#
 
 .plotly.3d = function(Y, X = 1, T = 1,
                      color = c("#444C5C", "#78A5A3", "#E1B16A", "#CE5A57"),
-                     x_lab = "X_1", t_lab = "X_2", y_lab = "Value", 
+                     x_lab = "X", t_lab = "T", y_lab = "Value", 
                      showaxes = TRUE)
 {
   if (class(Y)[1] == "dcs")
